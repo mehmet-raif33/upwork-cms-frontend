@@ -1,0 +1,9 @@
+/* globals.css */
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  /* display: flex; */
+}
