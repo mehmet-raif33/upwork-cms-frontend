@@ -75,7 +75,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
         const slug = await getParams();
         const token = localStorage.getItem('token');
         if (!token) {
-          setError('Token bulunamadı');
+          setError('Token not found');
           return;
         }
 
@@ -110,10 +110,10 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
             role: foundPersonnel.role || 'personnel'
           });
 
-          // Yönetici kontrolü
+          // Manager control
           if (foundPersonnel.role === 'admin') {
             setCanEdit(false);
-            setError('Yönetici hesapları düzenlenemez');
+            setError('Manager accounts cannot be edited');
             return;
           }
 
@@ -138,10 +138,10 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                  role: response.data.role || 'personnel'
                });
 
-               // Yönetici kontrolü
+               // Manager control
                if (response.data.role === 'admin') {
                  setCanEdit(false);
-                 setError('Yönetici hesapları düzenlenemez');
+                 setError('Manager accounts cannot be edited');
                  return;
                }
 
@@ -160,24 +160,24 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                  role: response.role || 'personnel'
                });
 
-               // Yönetici kontrolü
+               // Manager control
                if (response.role === 'admin') {
                  setCanEdit(false);
-                 setError('Yönetici hesapları düzenlenemez');
+                 setError('Manager accounts cannot be edited');
                  return;
                }
 
 
             } else {
-              setError('Personel bulunamadı');
+              setError('Personnel not found');
             }
           } catch {
-            setError('Personel bulunamadı');
+            setError('Personnel not found');
           }
         }
       } catch (error: unknown) {
         console.error('Error loading personnel:', error);
-        setError('Personel bilgileri yüklenirken hata oluştu');
+        setError('Error loading personnel information');
       } finally {
         setLoading(false);
       }
@@ -188,19 +188,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
     }
   }, [params, isLoggedIn]);
 
-  // Giriş yapmamış kullanıcıları landing page'e yönlendir
-  useEffect(() => {
-    if (!isLoggedIn) {
-      router.push('/landing');
-    }
-  }, [isLoggedIn, router]);
-
-  // Admin olmayan kullanıcıları ana sayfaya yönlendir
-  useEffect(() => {
-    if (isLoggedIn && user?.role !== 'admin') {
-      router.push('/');
-    }
-  }, [isLoggedIn, user, router]);
+  // ✅ Auth kontrolleri kaldırıldı - AuthInitializer yönlendirme yapacak
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -223,13 +211,13 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
     e.preventDefault();
     
     if (!personnel) {
-      setError('Personel bilgisi bulunamadı');
+      setError('Personnel information not found');
       return;
     }
 
     const token = localStorage.getItem('token');
     if (!token) {
-      setError('Token bulunamadı');
+      setError('Token not found');
       return;
     }
 
@@ -247,16 +235,16 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
       console.log('Update API Response:', response);
 
       if (response.success) {
-        setSuccess('Personel başarıyla güncellendi!');
+        setSuccess('Personnel successfully updated!');
         setTimeout(() => {
           router.push(`/personnel/${personnel.id}-${formData.full_name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || 'personel'}`);
         }, 1500);
       } else {
-        setError(response.message || 'Güncelleme sırasında hata oluştu');
+        setError(response.message || 'Error during update');
       }
     } catch (error: unknown) {
       console.error('Error updating personnel:', error);
-      setError('Personel güncellenirken hata oluştu');
+      setError('Error updating personnel');
     } finally {
       setSaving(false);
     }
@@ -285,7 +273,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
       <div className={`flex-1 bg-gradient-to-br min-h-screen flex items-center justify-center ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
         <div className={`text-center ${theme === 'dark' ? 'text-gray-200' : 'text-gray-600'}`}>
           <div className={`animate-spin rounded-full h-16 w-16 border-b-2 mx-auto mb-4 ${theme === 'dark' ? 'border-blue-400' : 'border-blue-600'}`}></div>
-          <p className="font-medium">Personel bilgileri yükleniyor...</p>
+          <p className="font-medium">Loading personnel information...</p>
         </div>
       </div>
     );
@@ -296,10 +284,10 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
       <div className={`flex-1 bg-gradient-to-br min-h-screen flex items-center justify-center ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
         <div className={`text-center ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
           <div className="text-6xl mb-4">⚠️</div>
-          <h1 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Hata Oluştu</h1>
+          <h1 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Error Occurred</h1>
           <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>{error}</p>
           <Link href="/personnel" className={`mt-4 inline-block px-6 py-3 rounded-lg transition-colors ${theme === 'dark' ? 'bg-blue-800 text-white hover:bg-blue-700' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
-            Personellere Dön
+            Back to Personnel
           </Link>
         </div>
       </div>
@@ -323,10 +311,10 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                 className={`flex items-center space-x-2 transition-colors ${theme === 'dark' ? 'text-blue-300 hover:text-blue-200' : 'text-blue-600 hover:text-blue-700'}`}
               >
                 <span>←</span>
-                <span>Geri Dön</span>
+                <span>Back</span>
               </Link>
               <h1 className={`text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                Personel Düzenle
+                Edit Personnel
               </h1>
             </div>
           </div>
@@ -371,7 +359,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
               {/* Full Name */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Ad Soyad *
+                  Full Name *
                 </label>
                 <input
                   type="text"
@@ -384,14 +372,14 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                       ? 'bg-slate-700 border-slate-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
-                  placeholder="Ad Soyad"
+                  placeholder="Full Name"
                 />
               </div>
 
               {/* Username */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Kullanıcı Adı
+                  Username
                 </label>
                 <input
                   type="text"
@@ -403,14 +391,14 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                       ? 'bg-slate-700 border-slate-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
-                  placeholder="Kullanıcı adı"
+                  placeholder="Username"
                 />
               </div>
 
               {/* Email */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  E-posta *
+                  Email *
                 </label>
                 <input
                   type="email"
@@ -423,14 +411,14 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                       ? 'bg-slate-700 border-slate-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
-                  placeholder="ornek@email.com"
+                  placeholder="example@email.com"
                 />
               </div>
 
               {/* Phone */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Telefon
+                  Phone
                 </label>
                 <input
                   type="tel"
@@ -442,14 +430,14 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                       ? 'bg-slate-700 border-slate-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
-                  placeholder="+90 555 123 45 67"
+                  placeholder="+1 555 123 45 67"
                 />
               </div>
 
               {/* Hire Date */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  İşe Başlama Tarihi
+                  Hire Date
                 </label>
                 <input
                   type="date"
@@ -467,7 +455,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
               {/* Status */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Durum
+                  Status
                 </label>
                 <select
                   name="status"
@@ -479,15 +467,15 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
                 >
-                  <option value="active">Aktif</option>
-                  <option value="inactive">Pasif</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
                 </select>
               </div>
 
               {/* Role */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Rol
+                  Role
                 </label>
                 <select
                   name="role"
@@ -499,8 +487,8 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
                 >
-                  <option value="personnel">Personel</option>
-                  <option value="admin">Yönetici</option>
+                  <option value="personnel">Personnel</option>
+                  <option value="admin">Manager</option>
                 </select>
               </div>
 
@@ -515,7 +503,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                   />
                   <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Aktif Personel
+                    Active Personnel
                   </span>
                 </label>
               </div>
@@ -523,7 +511,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
               {/* Notes */}
               <div className="md:col-span-2">
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Notlar
+                  Notes
                 </label>
                 <textarea
                   name="notes"
@@ -535,7 +523,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                       ? 'bg-slate-700 border-slate-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
-                  placeholder="Personel hakkında notlar..."
+                  placeholder="Notes about personnel..."
                 />
               </div>
             </div>
@@ -553,7 +541,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                       : 'bg-blue-600 hover:bg-blue-700 text-white'
                 }`}
               >
-                {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+                {saving ? 'Saving...' : 'Save Changes'}
               </button>
               
               <Link
@@ -564,7 +552,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                     : 'bg-gray-500 hover:bg-gray-600 text-white'
                 }`}
               >
-                İptal
+                Cancel
               </Link>
                          </div>
            </motion.form>
@@ -581,10 +569,10 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
             >
               <div className="text-6xl mb-4">🔒</div>
               <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                Düzenleme Kısıtlaması
+                Editing Restricted
               </h3>
               <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
-                Bu personel şu anda düzenlenemez.
+                This personnel cannot be edited at this time.
               </p>
             </motion.div>
           )}

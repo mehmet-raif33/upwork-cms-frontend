@@ -14,17 +14,18 @@ interface Transaction {
   vehicle_id: string;
   description: string;
   amount: string;
+  expense?: string;
+  is_expense?: boolean;
   transaction_date: string;
   category_id: string;
-  created_at: string;
+  payment_method?: string;
+  notes?: string;
   status?: string;
   status_notes?: string;
   status_changed_at?: string;
   status_changed_by?: string;
   // Joined data
   vehicle_plate?: string;
-  vehicle_brand?: string;
-  vehicle_model?: string;
   personnel_name?: string;
   category_name?: string;
   status_changed_by_name?: string;
@@ -64,16 +65,18 @@ const TransactionDetailPage: React.FC = () => {
         notes: ''
     });
 
-    // Giriş yapmamış kullanıcıları landing page'e yönlendir
-    useEffect(() => {
-        if (!isLoggedIn) {
-            router.push('/landing');
-        }
-    }, [isLoggedIn, router]);
+    // Status modal'ını açarken mevcut durumu set et
+    const openStatusModal = () => {
+        setStatusForm({
+            status: transaction?.status || '',
+            notes: ''
+        });
+        setShowStatusModal(true);
+    };
 
-    // Load transaction data
+    // Transaction'ı yükle
     useEffect(() => {
-        if (isLoggedIn && transactionId) {
+        if (transactionId) {
             const loadTransaction = async () => {
                 try {
                     const token = localStorage.getItem('token');
@@ -106,11 +109,16 @@ const TransactionDetailPage: React.FC = () => {
             };
             loadTransaction();
         }
-    }, [isLoggedIn, transactionId]);
+    }, [transactionId]);
 
     // Status güncelleme fonksiyonu
     const handleStatusUpdate = async () => {
-        if (!statusForm.status) return;
+        console.log('Status update başlatılıyor:', { statusForm, transactionId });
+        
+        if (!statusForm.status) {
+            console.log('Status seçilmemiş');
+            return;
+        }
         
         setStatusLoading(true);
         try {
@@ -119,15 +127,32 @@ const TransactionDetailPage: React.FC = () => {
                 throw new Error('Token bulunamadı');
             }
 
+            console.log('API call yapılıyor:', { status: statusForm.status, notes: statusForm.notes });
             await updateTransactionStatusApi(token, transactionId, {
                 status: statusForm.status,
                 notes: statusForm.notes
             });
 
-            // Sayfayı yenile
-            window.location.reload();
+            console.log('Status update başarılı');
+
+            // Başarılı güncelleme sonrası form'u reset et ve modal'ı kapat
+            setStatusForm({ status: '', notes: '' });
+            setShowStatusModal(false);
+            
+            // Transaction'ı yeniden yükle
+            console.log('Transaction yeniden yükleniyor');
+            const [transactionResponse, historyResponse] = await Promise.all([
+                getTransactionApi(token, transactionId),
+                getTransactionHistoryApi(token, transactionId)
+            ]);
+            setTransaction(transactionResponse.transaction);
+            setHistory(historyResponse.history || []);
+            console.log('Transaction yeniden yüklendi');
         } catch (error: unknown) {
             console.error('Status update error:', error);
+            console.error('Error type:', typeof error);
+            console.error('Error details:', error);
+            
             let errorMessage = 'Durum güncellenirken hata oluştu';
             if (error && typeof error === 'object' && 'message' in error) {
                 errorMessage += `: ${(error as { message?: string }).message}`;
@@ -136,6 +161,7 @@ const TransactionDetailPage: React.FC = () => {
         } finally {
             setStatusLoading(false);
             setShowStatusModal(false);
+            setStatusForm({ status: '', notes: '' });
         }
     };
 
@@ -170,7 +196,7 @@ const TransactionDetailPage: React.FC = () => {
                     {/* Action Buttons */}
                     <div className="flex space-x-3">
                         <motion.button
-                            onClick={() => setShowStatusModal(true)}
+                            onClick={openStatusModal}
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             whileHover={{ scale: 1.05 }}
@@ -418,6 +444,14 @@ const TransactionDetailPage: React.FC = () => {
                                         </div>
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                                İşlem Tipi:
+                                            </span>
+                                            <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                                {transaction.is_expense ? '💰 Gider' : '💵 Gelir'}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                                                 İşlem Türü:
                                             </span>
                                             <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
@@ -426,16 +460,45 @@ const TransactionDetailPage: React.FC = () => {
                                         </div>
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                                                Tutar:
+                                                Ödeme Yöntemi:
                                             </span>
-                                            <p className={`text-lg font-bold ${
-                                                parseFloat(transaction.amount) >= 0 
-                                                    ? theme === 'dark' ? 'text-green-400' : 'text-green-600'
-                                                    : theme === 'dark' ? 'text-red-400' : 'text-red-600'
-                                            }`}>
-                                                ₺{parseFloat(transaction.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                            <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                                {transaction.payment_method || 'Nakit'}
                                             </p>
                                         </div>
+                                        <div>
+                                            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                                {transaction.is_expense ? 'Gelir:' : 'Tutar:'}
+                                            </span>
+                                            <p className={`text-lg font-bold ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
+                                                💵 ₺{parseFloat(transaction.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                            </p>
+                                        </div>
+                                        {transaction.is_expense && transaction.expense && (
+                                            <div>
+                                                <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                                    Gider:
+                                                </span>
+                                                <p className={`text-lg font-bold ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>
+                                                    💰 ₺{parseFloat(transaction.expense).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </p>
+                                            </div>
+                                        )}
+                                        {transaction.is_expense && transaction.expense && (
+                                            <div>
+                                                <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                                    Kar/Zarar:
+                                                </span>
+                                                <p className={`text-lg font-bold ${
+                                                    parseFloat(transaction.amount) - parseFloat(transaction.expense) >= 0
+                                                        ? theme === 'dark' ? 'text-green-400' : 'text-green-600'
+                                                        : theme === 'dark' ? 'text-red-400' : 'text-red-600'
+                                                }`}>
+                                                    {parseFloat(transaction.amount) - parseFloat(transaction.expense) >= 0 ? '📈' : '📉'}
+                                                    ₺{(parseFloat(transaction.amount) - parseFloat(transaction.expense)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </p>
+                                            </div>
+                                        )}
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                                                 Durum:
@@ -477,14 +540,7 @@ const TransactionDetailPage: React.FC = () => {
                                                 {transaction.vehicle_plate || 'N/A'}
                                             </p>
                                         </div>
-                                        <div>
-                                            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                                                Marka/Model:
-                                            </span>
-                                            <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                                {transaction.vehicle_brand} {transaction.vehicle_model}
-                                            </p>
-                                        </div>
+
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                                                 Personel:
@@ -495,10 +551,10 @@ const TransactionDetailPage: React.FC = () => {
                                         </div>
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                                                Oluşturulma Tarihi:
+                                                İşlem Tarihi:
                                             </span>
                                             <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                                {new Date(transaction.created_at).toLocaleDateString('tr-TR')}
+                                                {new Date(transaction.transaction_date).toLocaleDateString('tr-TR')}
                                             </p>
                                         </div>
                                     </div>
@@ -520,6 +576,24 @@ const TransactionDetailPage: React.FC = () => {
                                     </p>
                                 </div>
                             </div>
+
+                            {/* Notes */}
+                            {transaction.notes && (
+                                <div className="mt-6">
+                                    <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                        Notlar
+                                    </h3>
+                                    <div className={`p-4 rounded-lg ${
+                                        theme === 'dark' 
+                                            ? 'bg-slate-700/50 border border-slate-600' 
+                                            : 'bg-gray-50 border border-gray-200'
+                                    }`}>
+                                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                            {transaction.notes}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 )}
@@ -595,7 +669,10 @@ const TransactionDetailPage: React.FC = () => {
                             
                             <div className="flex justify-end space-x-3 mt-6">
                                 <button
-                                    onClick={() => setShowStatusModal(false)}
+                                    onClick={() => {
+                                        setShowStatusModal(false);
+                                        setStatusForm({ status: '', notes: '' });
+                                    }}
                                     className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                                         theme === 'dark'
                                             ? 'bg-gray-600 hover:bg-gray-700 text-white'

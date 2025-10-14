@@ -14,20 +14,20 @@ const AdminPage: React.FC = () => {
     const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    // Kullanıcılar için state
+    // State for users
     const [users, setUsers] = useState<Array<{ id: string; username?: string; email: string; role?: string }>>([]);
     const [usersLoading, setUsersLoading] = useState(false);
     const [usersError, setUsersError] = useState<string | null>(null);
 
-    // Etkinlikler için state
+    // State for activities
     const [activities, setActivities] = useState<Array<{ id: string; action: string; user_name?: string; created_at?: string }>>([]);
     const [activitiesLoading, setActivitiesLoading] = useState(false);
     const [activitiesError, setActivitiesError] = useState<string | null>(null);
 
     const adminData = {
-        name: user?.name || 'Admin Kullanıcı',
+        name: user?.name || 'Admin User',
         email: user?.email || 'admin@ulas.com',
-        role: user?.role === 'admin' ? 'Sistem Yöneticisi' : 'Kullanıcı',
+        role: user?.role === 'admin' ? 'System Administrator' : 'User',
     };
 
     const handleChangePassword = async (e: React.FormEvent) => {
@@ -36,20 +36,20 @@ const AdminPage: React.FC = () => {
         setPasswordMessage(null);
         try {
             const token = localStorage.getItem('token');
-            if (!token) throw new Error('Oturum bulunamadı');
+            if (!token) throw new Error('Session not found');
             await changePasswordApi(token, { oldPassword, newPassword });
-            setPasswordMessage('Şifre başarıyla değiştirildi!');
+            setPasswordMessage('Password successfully changed!');
             setOldPassword('');
             setNewPassword('');
         } catch (err: unknown) {
-            const errorMessage = err && typeof err === 'object' && 'message' in err ? (err as { message?: string }).message || 'Şifre değiştirilemedi.' : 'Şifre değiştirilemedi.';
+            const errorMessage = err && typeof err === 'object' && 'message' in err ? (err as { message?: string }).message || 'Could not change password.' : 'Could not change password.';
             setPasswordMessage(errorMessage);
         } finally {
             setLoading(false);
         }
     };
 
-    // Kullanıcılar sekmesi açıldığında kullanıcıları çek
+    // Fetch users when users tab is opened
     useEffect(() => {
         if (activeTab === 'users') {
             const fetchUsers = async () => {
@@ -57,11 +57,11 @@ const AdminPage: React.FC = () => {
                 setUsersError(null);
                 try {
                     const token = localStorage.getItem('token');
-                    if (!token) throw new Error('Oturum bulunamadı');
+                    if (!token) throw new Error('Session not found');
                     const data = await getUsersApi(token);
                     setUsers(Array.isArray(data) ? data : []);
                 } catch (err: unknown) {
-                    const errorMessage = err && typeof err === 'object' && 'message' in err ? (err as { message?: string }).message || 'Kullanıcılar alınamadı' : 'Kullanıcılar alınamadı';
+                    const errorMessage = err && typeof err === 'object' && 'message' in err ? (err as { message?: string }).message || 'Could not fetch users' : 'Could not fetch users';
                     setUsersError(errorMessage);
                 } finally {
                     setUsersLoading(false);
@@ -71,7 +71,7 @@ const AdminPage: React.FC = () => {
         }
     }, [activeTab]);
 
-    // Son Etkinlikler sekmesi açıldığında etkinlikleri çek
+    // Fetch activities when recent activities tab is opened
     useEffect(() => {
         if (activeTab === 'activity') {
             const fetchActivities = async () => {
@@ -79,11 +79,11 @@ const AdminPage: React.FC = () => {
                 setActivitiesError(null);
                 try {
                     const token = localStorage.getItem('token');
-                    if (!token) throw new Error('Oturum bulunamadı');
+                    if (!token) throw new Error('Session not found');
                     const data = await getActivitiesApi(token);
                     setActivities(Array.isArray(data) ? data : []);
                 } catch (err: unknown) {
-                    const errorMessage = err && typeof err === 'object' && 'message' in err ? (err as { message?: string }).message || 'Etkinlikler alınamadı' : 'Etkinlikler alınamadı';
+                    const errorMessage = err && typeof err === 'object' && 'message' in err ? (err as { message?: string }).message || 'Could not fetch activities' : 'Could not fetch activities';
                     setActivitiesError(errorMessage);
                 } finally {
                     setActivitiesLoading(false);
@@ -103,8 +103,8 @@ const AdminPage: React.FC = () => {
             <div className="mb-6 sm:mb-8">
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2 sm:space-x-4">
-                        <Link href="/" className={`transition-colors text-sm sm:text-base ${theme === 'dark' ? 'text-blue-300 hover:text-blue-200' : 'text-blue-600 hover:text-blue-700'}`}>← Ana Sayfaya Dön</Link>
-                        <h1 className={`text-xl sm:text-2xl lg:text-3xl font-bold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Admin Paneli</h1>
+                        <Link href="/" className={`transition-colors text-sm sm:text-base ${theme === 'dark' ? 'text-blue-300 hover:text-blue-200' : 'text-blue-600 hover:text-blue-700'}`}>← Back to Home</Link>
+                        <h1 className={`text-xl sm:text-2xl lg:text-3xl font-bold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Admin Panel</h1>
                     </div>
                     <div className="flex items-center space-x-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${theme === 'dark' ? 'bg-purple-900 text-purple-200' : 'bg-purple-100 text-purple-800'}`}>Admin</span>
@@ -117,19 +117,19 @@ const AdminPage: React.FC = () => {
                 <div className={`flex flex-wrap gap-1 backdrop-blur-sm rounded-lg sm:rounded-xl p-1 shadow-lg ${theme === 'dark' ? 'bg-slate-800/80' : 'bg-white/80'}`}> 
                     <button onClick={() => setActiveTab('profile')} className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-2 sm:px-4 rounded-md sm:rounded-lg font-medium transition-all duration-300 text-xs sm:text-sm ${activeTab === 'profile' ? 'bg-blue-600 text-white shadow-lg' : theme === 'dark' ? 'text-gray-300 hover:text-gray-100 hover:bg-slate-700' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}`}>
                         <span className="text-sm sm:text-base">👤</span>
-                        <span className="hidden sm:inline">Profil</span>
+                        <span className="hidden sm:inline">Profile</span>
                     </button>
                     <button onClick={() => setActiveTab('users')} className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-2 sm:px-4 rounded-md sm:rounded-lg font-medium transition-all duration-300 text-xs sm:text-sm ${activeTab === 'users' ? 'bg-blue-600 text-white shadow-lg' : theme === 'dark' ? 'text-gray-300 hover:text-gray-100 hover:bg-slate-700' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}`}>
                         <span className="text-sm sm:text-base">👥</span>
-                        <span className="hidden sm:inline">Kullanıcılar</span>
+                        <span className="hidden sm:inline">Users</span>
                     </button>
                     <button onClick={() => setActiveTab('password')} className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-2 sm:px-4 rounded-md sm:rounded-lg font-medium transition-all duration-300 text-xs sm:text-sm ${activeTab === 'password' ? 'bg-blue-600 text-white shadow-lg' : theme === 'dark' ? 'text-gray-300 hover:text-gray-100 hover:bg-slate-700' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}`}>
                         <span className="text-sm sm:text-base">🔐</span>
-                        <span className="hidden sm:inline">Şifre Değiştir</span>
+                        <span className="hidden sm:inline">Change Password</span>
                     </button>
                     <button onClick={() => setActiveTab('activity')} className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-2 sm:px-4 rounded-md sm:rounded-lg font-medium transition-all duration-300 text-xs sm:text-sm ${activeTab === 'activity' ? 'bg-blue-600 text-white shadow-lg' : theme === 'dark' ? 'text-gray-300 hover:text-gray-100 hover:bg-slate-700' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}`}>
                         <span className="text-sm sm:text-base">📊</span>
-                        <span className="hidden sm:inline">Son Etkinlikler</span>
+                        <span className="hidden sm:inline">Recent Activities</span>
                     </button>
                 </div>
             </div>
@@ -138,20 +138,20 @@ const AdminPage: React.FC = () => {
             <div className="space-y-6">
                 {activeTab === 'profile' && (
                     <div className={`${theme === 'dark' ? 'bg-slate-800/80 border-slate-700' : 'bg-white/80 border-white/20'} backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl border p-4 sm:p-6`}>
-                        <h3 className={`text-lg sm:text-xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Profil Bilgileri</h3>
+                        <h3 className={`text-lg sm:text-xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Profile Information</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                             <div className="space-y-4">
                                 <div className={`flex items-center gap-3 p-3 rounded-lg ${theme === 'dark' ? 'bg-slate-700' : 'bg-gray-50'}`}>
                                     <span className="text-2xl">👤</span>
                                     <div>
-                                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Ad Soyad</p>
+                                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Full Name</p>
                                         <p className={`font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>{adminData.name}</p>
                                     </div>
                                 </div>
                                 <div className={`flex items-center gap-3 p-3 rounded-lg ${theme === 'dark' ? 'bg-slate-700' : 'bg-gray-50'}`}>
                                     <span className="text-2xl">📧</span>
                                     <div>
-                                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>E-posta</p>
+                                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Email</p>
                                         <p className={`font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>{adminData.email}</p>
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@ const AdminPage: React.FC = () => {
                                 <div className={`flex items-center gap-3 p-3 rounded-lg ${theme === 'dark' ? 'bg-slate-700' : 'bg-gray-50'}`}>
                                     <span className="text-2xl">🎯</span>
                                     <div>
-                                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Rol</p>
+                                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Role</p>
                                         <p className={`font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>{adminData.role}</p>
                                     </div>
                                 </div>
@@ -170,8 +170,8 @@ const AdminPage: React.FC = () => {
                 )}
                 {activeTab === 'users' && (
                     <div className={`${theme === 'dark' ? 'bg-slate-800/80 border-slate-700' : 'bg-white/80 border-white/20'} backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl border p-4 sm:p-6`}>
-                        <h3 className={`text-lg sm:text-xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Kullanıcılar</h3>
-                        {usersLoading && <div className="text-center text-sm text-gray-400">Yükleniyor...</div>}
+                        <h3 className={`text-lg sm:text-xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Users</h3>
+                        {usersLoading && <div className="text-center text-sm text-gray-400">Loading...</div>}
                         {usersError && <div className="text-center text-sm text-red-500">{usersError}</div>}
                         <div className="space-y-3">
                             {users.map((u) => (
@@ -193,10 +193,10 @@ const AdminPage: React.FC = () => {
                 )}
                 {activeTab === 'password' && (
                     <div className={`${theme === 'dark' ? 'bg-slate-800/80 border-slate-700' : 'bg-white/80 border-white/20'} backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl border p-4 sm:p-6 max-w-md mx-auto`}>
-                        <h3 className={`text-lg sm:text-xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Şifre Değiştir</h3>
+                        <h3 className={`text-lg sm:text-xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Change Password</h3>
                         <form onSubmit={handleChangePassword} className="space-y-4">
                             <div>
-                                <label className={`block mb-1 text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>Mevcut Şifre</label>
+                                <label className={`block mb-1 text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>Current Password</label>
                                 <input
                                     type="password"
                                     value={oldPassword}
@@ -207,11 +207,11 @@ const AdminPage: React.FC = () => {
                                             : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'}
                                     `}
                                     required
-                                    placeholder="Mevcut şifrenizi girin"
+                                    placeholder="Enter your current password"
                                 />
                             </div>
                             <div>
-                                <label className={`block mb-1 text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>Yeni Şifre</label>
+                                <label className={`block mb-1 text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>New Password</label>
                                 <input
                                     type="password"
                                     value={newPassword}
@@ -222,12 +222,12 @@ const AdminPage: React.FC = () => {
                                             : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'}
                                     `}
                                     required
-                                    placeholder="Yeni şifrenizi girin"
+                                    placeholder="Enter your new password"
                                 />
                             </div>
-                            <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition-colors">{loading ? 'Değiştiriliyor...' : 'Şifreyi Değiştir'}</button>
+                            <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition-colors">{loading ? 'Changing...' : 'Change Password'}</button>
                             {passwordMessage && (
-                                <div className={`mt-2 text-center text-sm font-medium ${passwordMessage.includes('başarı')
+                                <div className={`mt-2 text-center text-sm font-medium ${passwordMessage.includes('success')
                                     ? (theme === 'dark' ? 'text-green-400' : 'text-green-600')
                                     : (theme === 'dark' ? 'text-red-400' : 'text-red-600')
                                 }`}>
@@ -239,8 +239,8 @@ const AdminPage: React.FC = () => {
                 )}
                 {activeTab === 'activity' && (
                     <div className={`${theme === 'dark' ? 'bg-slate-800/80 border-slate-700' : 'bg-white/80 border-white/20'} backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl border p-4 sm:p-6`}>
-                        <h3 className={`text-lg sm:text-xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Son Etkinlikler</h3>
-                        {activitiesLoading && <div className="text-center text-sm text-gray-400">Yükleniyor...</div>}
+                        <h3 className={`text-lg sm:text-xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Recent Activities</h3>
+                        {activitiesLoading && <div className="text-center text-sm text-gray-400">Loading...</div>}
                         {activitiesError && <div className="text-center text-sm text-red-500">{activitiesError}</div>}
                         <div className="space-y-3 sm:space-y-4">
                             {activities.map((activity, index) => (

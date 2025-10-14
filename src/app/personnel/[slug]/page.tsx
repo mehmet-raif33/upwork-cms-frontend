@@ -31,7 +31,6 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
   const theme = useSelector((state: RootState) => state.theme.theme);
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const user = useSelector(selectUser);
-  const router = useRouter();
   const [personnel, setPersonnel] = useState<Personnel | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +46,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
         const slug = await getParams();
         const token = localStorage.getItem('token');
         if (!token) {
-          setError('Token bulunamadı');
+          setError('Token not found');
           return;
         }
 
@@ -80,15 +79,15 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
             } else if (response.id) {
               setPersonnel(response);
             } else {
-              setError('Personel bulunamadı');
+              setError('Personnel not found');
             }
           } catch {
-            setError('Personel bulunamadı');
+            setError('Personnel not found');
           }
         }
       } catch (error: unknown) {
         console.error('Error loading personnel:', error);
-        setError('Personel bilgileri yüklenirken hata oluştu');
+        setError('Error loading personnel information');
       } finally {
         setLoading(false);
       }
@@ -99,19 +98,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
     }
   }, [params, isLoggedIn]);
 
-  // Giriş yapmamış kullanıcıları landing page'e yönlendir
-  useEffect(() => {
-    if (!isLoggedIn) {
-      router.push('/landing');
-    }
-  }, [isLoggedIn, router]);
-
-  // Admin olmayan kullanıcıları ana sayfaya yönlendir
-  useEffect(() => {
-    if (isLoggedIn && user?.role !== 'admin') {
-      router.push('/');
-    }
-  }, [isLoggedIn, user, router]);
+  // ✅ Auth kontrolleri kaldırıldı - AuthInitializer yönlendirme yapacak
 
   // Giriş yapmamış kullanıcılar için loading göster
   if (!isLoggedIn) {
@@ -136,7 +123,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
       <div className={`flex-1 bg-gradient-to-br min-h-screen flex items-center justify-center ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
         <div className={`text-center ${theme === 'dark' ? 'text-gray-200' : 'text-gray-600'}`}>
           <div className={`animate-spin rounded-full h-16 w-16 border-b-2 mx-auto mb-4 ${theme === 'dark' ? 'border-blue-400' : 'border-blue-600'}`}></div>
-          <p className="font-medium">Personel bilgileri yükleniyor...</p>
+          <p className="font-medium">Loading personnel information...</p>
         </div>
       </div>
     );
@@ -147,10 +134,10 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
       <div className={`flex-1 bg-gradient-to-br min-h-screen flex items-center justify-center ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
         <div className={`text-center ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
           <div className="text-6xl mb-4">⚠️</div>
-          <h1 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Hata Oluştu</h1>
+          <h1 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Error Occurred</h1>
           <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>{error}</p>
           <Link href="/personnel" className={`mt-4 inline-block px-6 py-3 rounded-lg transition-colors ${theme === 'dark' ? 'bg-blue-800 text-white hover:bg-blue-700' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
-            Personellere Dön
+            Back to Personnel
           </Link>
         </div>
       </div>
@@ -162,10 +149,10 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
       <div className={`flex-1 bg-gradient-to-br min-h-screen flex items-center justify-center ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
         <div className={`text-center ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
           <div className="text-6xl mb-4">👤</div>
-          <h1 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Personel Bulunamadı</h1>
-          <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>Bu ID&apos;ye sahip personel sistemde bulunmamaktadır.</p>
+          <h1 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Personnel Not Found</h1>
+          <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>No personnel found with this ID.</p>
           <Link href="/personnel" className={`mt-4 inline-block px-6 py-3 rounded-lg transition-colors ${theme === 'dark' ? 'bg-blue-800 text-white hover:bg-blue-700' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
-            Personellere Dön
+            Back to Personnel
           </Link>
         </div>
       </div>
@@ -189,10 +176,10 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
                 className={`flex items-center space-x-2 transition-colors ${theme === 'dark' ? 'text-blue-300 hover:text-blue-200' : 'text-blue-600 hover:text-blue-700'}`}
               >
                 <span>←</span>
-                <span>Personellere Dön</span>
+                <span>Back to Personnel</span>
               </Link>
               <h1 className={`text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                {personnel.full_name || 'İsimsiz Personel'}
+                {personnel.full_name || 'Unnamed Personnel'}
               </h1>
             </div>
             <div className="flex items-center space-x-3">
@@ -201,7 +188,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
                   ? 'bg-green-100 text-green-800' 
                   : 'bg-red-100 text-red-800'
               }`}>
-                {personnel.status === 'active' ? 'Aktif' : 'Pasif'}
+                {personnel.status === 'active' ? 'Active' : 'Inactive'}
               </span>
               {personnel.role !== 'admin' && (
                 <Link 
@@ -212,7 +199,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
                       : 'bg-blue-600 hover:bg-blue-700 text-white'
                   }`}
                 >
-                  Düzenle
+                  Edit
                 </Link>
               )}
               {personnel.role === 'admin' && (
@@ -221,7 +208,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
                     ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
                     : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                 }`}>
-                  Düzenlenemez
+                  Cannot Edit
                 </span>
               )}
             </div>
@@ -242,36 +229,36 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
               <div className="text-center">
                 <div className="text-6xl mb-4">👤</div>
                 <h2 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  {personnel.full_name || 'İsimsiz'}
+                  {personnel.full_name || 'Unnamed'}
                 </h2>
                 <p className={`text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                  {personnel.role === 'admin' ? 'Yönetici' : 'Personel'}
+                  {personnel.role === 'admin' ? 'Manager' : 'Personnel'}
                 </p>
               </div>
               <div className="lg:col-span-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className={`p-4 rounded-lg ${theme === 'dark' ? 'bg-blue-900/50' : 'bg-blue-50'}`}>
-                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>E-posta</p>
+                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Email</p>
                     <p className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      {personnel.email || 'Belirtilmemiş'}
+                      {personnel.email || 'Not specified'}
                     </p>
                   </div>
                   <div className={`p-4 rounded-lg ${theme === 'dark' ? 'bg-green-900/50' : 'bg-green-50'}`}>
-                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Telefon</p>
+                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Phone</p>
                     <p className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      {personnel.phone || 'Belirtilmemiş'}
+                      {personnel.phone || 'Not specified'}
                     </p>
                   </div>
                   <div className={`p-4 rounded-lg ${theme === 'dark' ? 'bg-purple-900/50' : 'bg-purple-50'}`}>
-                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Kullanıcı Adı</p>
+                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Username</p>
                     <p className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      {personnel.username || 'Belirtilmemiş'}
+                      {personnel.username || 'Not specified'}
                     </p>
                   </div>
                   <div className={`p-4 rounded-lg ${theme === 'dark' ? 'bg-yellow-900/50' : 'bg-yellow-50'}`}>
-                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>İşe Başlama</p>
+                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Hire Date</p>
                     <p className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      {personnel.hire_date ? new Date(personnel.hire_date).toLocaleDateString('tr-TR') : 'Belirtilmemiş'}
+                      {personnel.hire_date ? new Date(personnel.hire_date).toLocaleDateString('en-US') : 'Not specified'}
                     </p>
                   </div>
                 </div>
@@ -292,30 +279,30 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
           }`}
         >
           <h3 className={`text-xl font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-            Detaylı Bilgiler
+            Detailed Information
           </h3>
           <div className="space-y-4">
             <div className={`flex justify-between items-center py-2 border-b ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}>
-              <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Durum:</span>
+              <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Status:</span>
               <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                {personnel.is_active ? 'Aktif' : 'Pasif'}
+                {personnel.is_active ? 'Active' : 'Inactive'}
               </span>
             </div>
             <div className={`flex justify-between items-center py-2 border-b ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}>
-              <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Rol:</span>
+              <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Role:</span>
               <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                {personnel.role === 'admin' ? 'Yönetici' : 'Personel'}
+                {personnel.role === 'admin' ? 'Manager' : 'Personnel'}
               </span>
             </div>
             <div className={`flex justify-between items-center py-2 border-b ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}>
-              <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Kayıt Tarihi:</span>
+              <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Registration Date:</span>
               <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                {new Date(personnel.created_at).toLocaleDateString('tr-TR')}
+                {new Date(personnel.created_at).toLocaleDateString('en-US')}
               </span>
             </div>
             {personnel.notes && (
               <div className={`py-2 border-b ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}>
-                <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Notlar:</span>
+                <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Notes:</span>
                 <p className={`mt-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                   {personnel.notes}
                 </p>
