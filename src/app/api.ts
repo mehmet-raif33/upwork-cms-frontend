@@ -9,7 +9,7 @@ const getApiBaseUrl = () => {
   // /api prefix'i ekle
   return `${baseUrl}/api`;
 };
-
+//sdfds
 const API_BASE_URL = getApiBaseUrl();
 
 // Debug logging (sadece development'ta)
