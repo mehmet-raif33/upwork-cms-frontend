@@ -2,9 +2,20 @@ import { tokenManager } from './token-manager';
 
 // API Configuration - NODE_ENV'e göre sunucu seçimi
 const getBaseURL = () => {
-  const baseUrl = process.env.NODE_ENV === 'development'
-    ? process.env.NEXT_PUBLIC_RAILWAY_LOCAL || 'http://localhost:5000'
-    : process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://upwork-cms-backend-production.up.railway.app';
+  // Production check - Railway'de her zaman production
+  const isProduction = process.env.NODE_ENV === 'production';
+  
+  const baseUrl = isProduction
+    ? (process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://upwork-cms-backend-production.up.railway.app')
+    : (process.env.NEXT_PUBLIC_RAILWAY_LOCAL || 'http://localhost:5000');
+  
+  console.log('🔧 Enhanced API Client - Environment:', {
+    NODE_ENV: process.env.NODE_ENV,
+    isProduction,
+    RAILWAY_SERVER: process.env.NEXT_PUBLIC_RAILWAY_SERVER,
+    RAILWAY_LOCAL: process.env.NEXT_PUBLIC_RAILWAY_LOCAL,
+    selectedBaseUrl: baseUrl
+  });
   
   // /api prefix'i ekle
   return `${baseUrl}/api`;
