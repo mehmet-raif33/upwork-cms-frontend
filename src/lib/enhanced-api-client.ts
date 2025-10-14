@@ -7,7 +7,7 @@ const getBaseURL = () => {
   const isProduction = appEnv === 'production';
   
   const baseUrl = isProduction
-    ? (process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://upwork-cms-backend-production.up.railway.app')
+    ? (process.env.NEXT_PUBLIC_RAILWAY_SERVER )
     : (process.env.NEXT_PUBLIC_RAILWAY_LOCAL || 'http://localhost:5000');
   
   console.log('🔧 Enhanced API Client - Environment:', {
