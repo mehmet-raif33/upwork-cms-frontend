@@ -4,12 +4,11 @@ import { broadcastTokenExpired } from './utils/broadcastChannel';
 const getApiBaseUrl = () => {
   const baseUrl = process.env.NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_RAILWAY_LOCAL || 'http://localhost:5000'
-    : process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://upwork-cms-backend-production.up.railway.app/';
+    : process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://upwork-cms-backend-production.up.railway.app';
   
   // /api prefix'i ekle
   return `${baseUrl}/api`;
 };
-//sdfds
 const API_BASE_URL = getApiBaseUrl();
 
 // Debug logging (sadece development'ta)

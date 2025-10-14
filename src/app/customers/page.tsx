@@ -11,7 +11,7 @@ import { api } from '../../lib/api-client';
 const getApiBaseUrl = () => {
   const baseUrl = process.env.NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_RAILWAY_LOCAL || 'http://localhost:5000'
-    : process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://ulasserver-production.up.railway.app';
+    : process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://upwork-cms-backend-production.up.railway.app';
   
   // /api prefix'i ekle (customers/page bu özellik kullanmıyorsa kaldırılabilir)
   return `${baseUrl}/api`;
