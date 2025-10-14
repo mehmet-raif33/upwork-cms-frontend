@@ -2,10 +2,11 @@ import { broadcastTokenExpired } from '../app/utils/broadcastChannel';
 
 // Environment'a göre API URL'ini belirle
 const getApiBaseUrl = () => {
-  // NODE_ENV'e göre sunucu seçimi
-  const baseUrl = process.env.NODE_ENV === 'development'
-    ? process.env.NEXT_PUBLIC_RAILWAY_LOCAL || 'http://localhost:5000'
-    : process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://upwork-cms-backend-production.up.railway.app';
+  // NEXT_PUBLIC_APP_ENV kullan (production veya development)
+  const appEnv = process.env.NEXT_PUBLIC_APP_ENV || 'development';
+  const baseUrl = appEnv === 'production'
+    ? process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://upwork-cms-backend-production.up.railway.app'
+    : process.env.NEXT_PUBLIC_RAILWAY_LOCAL || 'http://localhost:5000';
   
   // /api prefix'i ekle
   return `${baseUrl}/api`;

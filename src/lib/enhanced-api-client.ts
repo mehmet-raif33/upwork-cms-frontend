@@ -1,15 +1,17 @@
 import { tokenManager } from './token-manager';
 
-// API Configuration - NODE_ENV'e göre sunucu seçimi
+// API Configuration - APP_ENV'e göre sunucu seçimi
 const getBaseURL = () => {
-  // Production check - Railway'de her zaman production
-  const isProduction = process.env.NODE_ENV === 'production';
+  // NEXT_PUBLIC_APP_ENV kullan (production veya development)
+  const appEnv = process.env.NEXT_PUBLIC_APP_ENV || 'development';
+  const isProduction = appEnv === 'production';
   
   const baseUrl = isProduction
     ? (process.env.NEXT_PUBLIC_RAILWAY_SERVER || 'https://upwork-cms-backend-production.up.railway.app')
     : (process.env.NEXT_PUBLIC_RAILWAY_LOCAL || 'http://localhost:5000');
   
   console.log('🔧 Enhanced API Client - Environment:', {
+    APP_ENV: appEnv,
     NODE_ENV: process.env.NODE_ENV,
     isProduction,
     RAILWAY_SERVER: process.env.NEXT_PUBLIC_RAILWAY_SERVER,
