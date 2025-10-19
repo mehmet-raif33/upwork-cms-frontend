@@ -622,23 +622,41 @@ const ProfitPage: React.FC = () => {
   
   // State'ler
   const [monthlyData, setMonthlyData] = useState<MonthlyProfit | null>(null);
-  const [selectedYear, setSelectedYear] = useState(2024);
-  const [selectedMonth, setSelectedMonth] = useState(7); // Temmuz ayı için
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedCategoriesForMonthly, setSelectedCategoriesForMonthly] = useState<number[]>([]);
   
   const [yearlyData, setYearlyData] = useState<YearlyProfit | null>(null);
-  const [selectedYearForYearly, setSelectedYearForYearly] = useState(2024);
+  const [selectedYearForYearly, setSelectedYearForYearly] = useState(new Date().getFullYear());
   const [selectedCategoriesForYearly, setSelectedCategoriesForYearly] = useState<number[]>([]);
 
   const [weeklyData, setWeeklyData] = useState<WeeklyProfit | null>(null);
   const [dailyData, setDailyData] = useState<WeeklyProfit | null>(null);
 
-  const [selectedStartDate, setSelectedStartDate] = useState('2024-07-14');
-  const [selectedEndDate, setSelectedEndDate] = useState('2024-07-20');
+  const [selectedStartDate, setSelectedStartDate] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  });
+  const [selectedEndDate, setSelectedEndDate] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  });
   const [selectedWeek, setSelectedWeek] = useState<string>('');
-  const [selectedYearForWeekly, setSelectedYearForWeekly] = useState(2024);
+  const [selectedYearForWeekly, setSelectedYearForWeekly] = useState(new Date().getFullYear());
   const [weeklyOptions, setWeeklyOptions] = useState<Array<{value: string, label: string}>>([]);
-  const [selectedDailyDate, setSelectedDailyDate] = useState('2024-07-20');
+  const [selectedDailyDate, setSelectedDailyDate] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  });
   
   // Categories for filtering
   const [categories, setCategories] = useState<Array<{id: number, name: string}>>([]);
@@ -802,7 +820,7 @@ const ProfitPage: React.FC = () => {
           hasInnerData: !!response?.data?.data,
           fullResponse: response
         });
-        setError('Aylık kar alınamadı');
+        setError('Could not fetch monthly profit');
       }
     } catch (error: unknown) {
       console.error('💥 [FRONTEND-DEBUG] Catch error occurred:', {
@@ -824,7 +842,7 @@ const ProfitPage: React.FC = () => {
         }
       }
       
-      setError('Aylık kar yüklenirken hata oluştu');
+      setError('Error loading monthly profit');
     } finally {
       console.log('🏁 [FRONTEND-DEBUG] loadMonthlyProfit tamamlandı', {
         finalState: { loading: false, hasData: !!monthlyData },
@@ -937,11 +955,11 @@ const ProfitPage: React.FC = () => {
           dataSuccess: response?.data?.success,
           hasInnerData: !!response?.data?.data,
         });
-        setError('Yıllık kar alınamadı');
+        setError('Could not fetch yearly profit');
       }
     } catch (error: unknown) {
       console.error('💥 [FRONTEND] Yearly catch error:', error);
-      setError('Yıllık kar yüklenirken hata oluştu');
+      setError('Error loading yearly profit');
     } finally {
       setLoading(false);
     }
@@ -970,7 +988,7 @@ const ProfitPage: React.FC = () => {
         setCategories([]);
       }
     } catch (error) {
-      console.error('❌ [FRONTEND] Kategoriler yüklenirken hata:', error);
+      console.error('❌ [FRONTEND] Error loading categories:', error);
       console.error('❌ [FRONTEND] Error details:', {
         message: error instanceof Error ? error.message : 'Unknown error',
         status: (error as any)?.status || 'No status',
@@ -1031,11 +1049,11 @@ const ProfitPage: React.FC = () => {
       const endDateStr = weekEnd.toISOString().split('T')[0];
       const value = `${startDateStr}_${endDateStr}`;
       
-      const startFormatted = currentWeekStart.toLocaleDateString('tr-TR', { 
+      const startFormatted = currentWeekStart.toLocaleDateString('en-US', { 
         day: 'numeric', 
         month: 'short' 
       });
-      const endFormatted = weekEnd.toLocaleDateString('tr-TR', { 
+      const endFormatted = weekEnd.toLocaleDateString('en-US', { 
         day: 'numeric', 
         month: 'short' 
       });
@@ -1217,11 +1235,11 @@ const ProfitPage: React.FC = () => {
           dataExists: !!response?.data,
           message: (response as any)?.message || 'Weekly data not found'
         });
-        setError((response as any)?.message || 'Haftalık kar alınamadı');
+        setError((response as any)?.message || 'Could not fetch weekly profit');
       }
     } catch (error: unknown) {
       console.error('💥 [FRONTEND] Weekly catch error:', error);
-      setError('Haftalık kar yüklenirken hata oluştu');
+      setError('Error loading weekly profit');
     } finally {
       console.log('🏁 [FRONTEND] loadWeeklyProfit tamamlandı');
       setLoading(false);
@@ -1344,11 +1362,11 @@ const ProfitPage: React.FC = () => {
           dataExists: !!response?.data,
           message: anyResponse?.message || 'Daily data not found'
         });
-        setError(anyResponse?.message || 'Günlük kar alınamadı');
+        setError(anyResponse?.message || 'Could not fetch daily profit');
       }
     } catch (error: unknown) {
       console.error('💥 [FRONTEND] Daily catch error:', error);
-      setError('Günlük kar yüklenirken hata oluştu');
+      setError('Error loading daily profit');
     } finally {
       console.log('🏁 [FRONTEND] loadDailyProfit tamamlandı');
       setLoading(false);
@@ -1366,7 +1384,7 @@ const ProfitPage: React.FC = () => {
       selectedCategoriesForMonthly: selectedCategoriesForMonthly.length
     });
 
-    if (!isLoggedIn || user?.role !== 'admin') {
+    if (!isLoggedIn || user?.role !== 'manager') {
       console.log('❌ [FRONTEND] Yetki kontrolü başarısız', { isLoggedIn, userRole: user?.role });
       return;
     }
@@ -1433,9 +1451,9 @@ const ProfitPage: React.FC = () => {
   }, [activeTab, selectedYearForWeekly, generateWeeklyOptions]);
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('tr-TR', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'TRY'
+      currency: 'USD'
     }).format(amount);
   };
 
@@ -1467,7 +1485,7 @@ const ProfitPage: React.FC = () => {
             <>
               <div>
                 <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  📅 Yıl Seçimi
+                  📅 Year Selection
                 </label>
                 <select
                   value={selectedYear}
@@ -1485,7 +1503,7 @@ const ProfitPage: React.FC = () => {
               </div>
               <div>
                 <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  🗓️ Ay Seçimi
+                  🗓️ Month Selection
                 </label>
                 <select
                   value={selectedMonth}
@@ -1509,7 +1527,7 @@ const ProfitPage: React.FC = () => {
           {tabType === 'yearly' && (
             <div>
               <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                📅 Yıl Seçimi
+                📅 Year Selection
               </label>
               <select 
                 value={selectedYearForYearly} 
@@ -1529,7 +1547,7 @@ const ProfitPage: React.FC = () => {
             <>
               <div>
                 <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  📅 Yıl Seçimi
+                  📅 Year Selection
                 </label>
                 <select 
                   value={selectedYearForWeekly} 
@@ -1549,7 +1567,7 @@ const ProfitPage: React.FC = () => {
               </div>
               <div>
                 <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  📊 Hafta Seçimi
+                  📊 Week Selection
                 </label>
                 <select 
                   value={selectedWeek} 
@@ -1574,7 +1592,7 @@ const ProfitPage: React.FC = () => {
           {tabType === 'daily' && (
             <div>
               <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                📅 Tarih Seçimi
+                📅 Date Selection
               </label>
               <input 
                 type="date" 
@@ -1590,7 +1608,7 @@ const ProfitPage: React.FC = () => {
         
         <div className="flex-1 min-w-0 w-full">
           <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-            🏷️ Kategori Filtreleme (Geliştirme Aşamasında)
+            🏷️ Category Filtering (Under Development)
           </label>
           <div className={`p-4 border rounded-xl max-h-40 overflow-y-auto ${
             theme === 'dark' 
@@ -1659,7 +1677,7 @@ const ProfitPage: React.FC = () => {
   const SummaryCards = ({ data }: { data: MonthlyProfit | YearlyProfit | WeeklyProfit }) => {
     const cards = [
       {
-        title: 'Toplam Gelir',
+        title: 'Total Revenue',
         value: formatCurrency(data.summary.totalRevenue),
         icon: '💰',
         gradient: 'from-emerald-500 to-green-600',
@@ -1667,7 +1685,7 @@ const ProfitPage: React.FC = () => {
         darkBgGradient: 'from-emerald-900/20 to-green-900/20'
       },
       {
-        title: 'Toplam Gider',
+        title: 'Total Expense',
         value: formatCurrency(data.summary.totalExpense),
         icon: '💸',
         gradient: 'from-red-500 to-pink-600',
@@ -1675,7 +1693,7 @@ const ProfitPage: React.FC = () => {
         darkBgGradient: 'from-red-900/20 to-pink-900/20'
       },
       {
-        title: 'Net Kar',
+        title: 'Net Profit',
         value: formatCurrency(data.summary.totalProfit),
         icon: data.summary.totalProfit >= 0 ? '📈' : '📉',
         gradient: data.summary.totalProfit >= 0 ? 'from-blue-500 to-indigo-600' : 'from-orange-500 to-red-600',
@@ -1684,7 +1702,7 @@ const ProfitPage: React.FC = () => {
         isProfit: true
       },
       {
-        title: 'Kar Marjı',
+        title: 'Profit Margin',
         value: formatPercentage(data.summary.profitMargin),
         icon: '📊',
         gradient: 'from-purple-500 to-pink-600',
@@ -1761,7 +1779,7 @@ const ProfitPage: React.FC = () => {
               {title}
             </h3>
             <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
-              Henüz veri bulunmuyor
+              No data available yet
             </p>
           </div>
         </div>
@@ -1790,7 +1808,7 @@ const ProfitPage: React.FC = () => {
                 ? 'bg-slate-700 text-gray-300' 
                 : 'bg-gray-100 text-gray-600'
             }`}>
-              {data.length} kayıt
+              {data.length} records
             </span>
           </h3>
         </div>
@@ -1898,10 +1916,10 @@ const ProfitPage: React.FC = () => {
             <span className="text-3xl">📋</span>
           </div>
           <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-            İşlem Bulunamadı
+            No Transactions Found
           </h3>
           <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
-            Bu dönem için işlem kaydı bulunmuyor
+            No transaction records available for this period
           </p>
         </div>
       );
@@ -1923,13 +1941,13 @@ const ProfitPage: React.FC = () => {
             theme === 'dark' ? 'text-white' : 'text-gray-900'
           }`}>
             <span className="text-2xl">📋</span>
-            Detaylı İşlem Listesi
+            Detailed Transaction List
             <span className={`ml-auto text-sm font-normal px-3 py-1 rounded-full ${
               theme === 'dark' 
                 ? 'bg-slate-700 text-gray-300' 
                 : 'bg-gray-100 text-gray-600'
             }`}>
-              {transactions.length} işlem
+              {transactions.length} transactions
             </span>
           </h3>
         </div>
@@ -1939,37 +1957,37 @@ const ProfitPage: React.FC = () => {
             <thead className="sticky top-0 z-10">
               <tr className={`${theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50'}`}>
                 <th className={`px-4 py-4 text-left text-sm font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Açıklama
+                  Description
                 </th>
                 <th className={`px-4 py-4 text-left text-sm font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Kategori
+                  Category
                 </th>
                 <th className={`px-4 py-4 text-left text-sm font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Araç
+                  Vehicle
                 </th>
                 <th className={`px-4 py-4 text-left text-sm font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Personel
+                  Personnel
                 </th>
                 <th 
                   className={`px-4 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-opacity-75 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}
                   onClick={() => handleSort('amount')}
                 >
-                  Tutar {sortKey === 'amount' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+                  Amount {sortKey === 'amount' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
                 </th>
                 <th className={`px-4 py-4 text-left text-sm font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                  Gider
+                  Expense
                 </th>
                 <th 
                   className={`px-4 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-opacity-75 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}
                   onClick={() => handleSort('profit')}
                 >
-                  Kar {sortKey === 'profit' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+                  Profit {sortKey === 'profit' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
                 </th>
                 <th 
                   className={`px-4 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-opacity-75 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}
                   onClick={() => handleSort('transaction_date')}
                 >
-                  Tarih {sortKey === 'transaction_date' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+                  Date {sortKey === 'transaction_date' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
                 </th>
               </tr>
             </thead>
@@ -2006,7 +2024,7 @@ const ProfitPage: React.FC = () => {
                     {formatCurrency(tx.profit)}
                   </td>
                   <td className={`px-4 py-3 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {new Date(tx.transaction_date).toLocaleDateString('tr-TR')}
+                    {new Date(tx.transaction_date).toLocaleDateString('en-US')}
                   </td>
                 </motion.tr>
               ))}
@@ -2035,10 +2053,10 @@ const ProfitPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <h1 className={`text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  Kar Analizi
+                  Profit Analysis
                 </h1>
                 <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
-                  Kapsamlı kar-zarar analizi ve raporlama
+                  Comprehensive profit-loss analysis and reporting
                 </p>
               </div>
               <motion.button
@@ -2056,7 +2074,7 @@ const ProfitPage: React.FC = () => {
               >
                 <div className="flex items-center gap-2">
                   <span className="text-lg group-hover:scale-110 transition-transform duration-200">💰</span>
-                  <span>Ciro Analizi</span>
+                  <span>Revenue Analysis</span>
                   <span className="text-sm group-hover:translate-x-1 transition-transform duration-200">→</span>
                 </div>
               </motion.button>
@@ -2119,7 +2137,7 @@ const ProfitPage: React.FC = () => {
                   <span className="text-3xl">⚠️</span>
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-bold text-xl mb-2">Hata Oluştu</h4>
+                  <h4 className="font-bold text-xl mb-2">Error Occurred</h4>
                   <p className="text-lg opacity-90">{error}</p>
                 </div>
               </div>
@@ -2181,37 +2199,37 @@ const ProfitPage: React.FC = () => {
                   
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                     <EnhancedTable 
-                      title="Kategori Bazında Analiz" 
+                      title="Analysis by Category" 
                       data={monthlyData.breakdown.byCategory} 
                       columns={[
-                        { key: 'category', label: 'Kategori' },
-                        { key: 'revenue', label: 'Gelir' },
-                        { key: 'expense', label: 'Gider' },
-                        { key: 'profit', label: 'Kar', isProfit: true }
+                        { key: 'category', label: 'Category' },
+                        { key: 'revenue', label: 'Revenue' },
+                        { key: 'expense', label: 'Expense' },
+                        { key: 'profit', label: 'Profit', isProfit: true }
                       ]}
                       icon="📊"
                     />
                     <EnhancedTable 
-                      title="Araç Bazında Analiz" 
+                      title="Analysis by Vehicle" 
                       data={monthlyData.breakdown.byVehicle} 
                       columns={[
-                        { key: 'vehicle', label: 'Araç' },
-                        { key: 'revenue', label: 'Gelir' },
-                        { key: 'expense', label: 'Gider' },
-                        { key: 'profit', label: 'Kar', isProfit: true }
+                        { key: 'vehicle', label: 'Vehicle' },
+                        { key: 'revenue', label: 'Revenue' },
+                        { key: 'expense', label: 'Expense' },
+                        { key: 'profit', label: 'Profit', isProfit: true }
                       ]}
                       icon="🚗"
                     />
                   </div>
                   
                   <EnhancedTable 
-                    title="Personel Bazında Analiz" 
+                    title="Analysis by Personnel" 
                     data={monthlyData.breakdown.byPersonnel} 
                     columns={[
                       { key: 'personnel', label: 'Personel' },
-                      { key: 'revenue', label: 'Gelir' },
-                      { key: 'expense', label: 'Gider' },
-                      { key: 'profit', label: 'Kar', isProfit: true }
+                      { key: 'revenue', label: 'Revenue' },
+                      { key: 'expense', label: 'Expense' },
+                      { key: 'profit', label: 'Profit', isProfit: true }
                     ]}
                     icon="👥"
                   />
@@ -2232,49 +2250,49 @@ const ProfitPage: React.FC = () => {
                   
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                     <EnhancedTable 
-                      title="Kategori Bazında Analiz" 
+                      title="Analysis by Category" 
                       data={yearlyData.breakdown?.byCategory || []} 
                       columns={[
-                        { key: 'category', label: 'Kategori' },
-                        { key: 'revenue', label: 'Gelir' },
-                        { key: 'expense', label: 'Gider' },
-                        { key: 'profit', label: 'Kar', isProfit: true }
+                        { key: 'category', label: 'Category' },
+                        { key: 'revenue', label: 'Revenue' },
+                        { key: 'expense', label: 'Expense' },
+                        { key: 'profit', label: 'Profit', isProfit: true }
                       ]}
                       icon="📊"
                     />
                     <EnhancedTable 
-                      title="Araç Bazında Analiz" 
+                      title="Analysis by Vehicle" 
                       data={yearlyData.breakdown?.byVehicle || []} 
                       columns={[
-                        { key: 'vehicle', label: 'Araç' },
-                        { key: 'revenue', label: 'Gelir' },
-                        { key: 'expense', label: 'Gider' },
-                        { key: 'profit', label: 'Kar', isProfit: true }
+                        { key: 'vehicle', label: 'Vehicle' },
+                        { key: 'revenue', label: 'Revenue' },
+                        { key: 'expense', label: 'Expense' },
+                        { key: 'profit', label: 'Profit', isProfit: true }
                       ]}
                       icon="🚗"
                     />
                   </div>
                   
                   <EnhancedTable 
-                    title="Personel Bazında Analiz" 
+                    title="Analysis by Personnel" 
                     data={yearlyData.breakdown?.byPersonnel || []} 
                     columns={[
                       { key: 'personnel', label: 'Personel' },
-                      { key: 'revenue', label: 'Gelir' },
-                      { key: 'expense', label: 'Gider' },
-                      { key: 'profit', label: 'Kar', isProfit: true }
+                      { key: 'revenue', label: 'Revenue' },
+                      { key: 'expense', label: 'Expense' },
+                      { key: 'profit', label: 'Profit', isProfit: true }
                     ]}
                     icon="👥"
                   />
                   
                   <EnhancedTable 
-                    title="Aylık Dağılım" 
+                    title="Monthly Distribution" 
                     data={yearlyData.monthlyBreakdown} 
                     columns={[
-                      { key: 'monthName', label: 'Ay' },
-                      { key: 'revenue', label: 'Gelir' },
-                      { key: 'expense', label: 'Gider' },
-                      { key: 'profit', label: 'Kar', isProfit: true }
+                      { key: 'monthName', label: 'Month' },
+                      { key: 'revenue', label: 'Revenue' },
+                      { key: 'expense', label: 'Expense' },
+                      { key: 'profit', label: 'Profit', isProfit: true }
                     ]}
                     icon="📈"
                   />
@@ -2295,50 +2313,50 @@ const ProfitPage: React.FC = () => {
                   
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                     <EnhancedTable 
-                      title="Kategori Bazında Analiz" 
+                      title="Analysis by Category" 
                       data={weeklyData.breakdown?.byCategory || []} 
                       columns={[
-                        { key: 'category', label: 'Kategori' },
-                        { key: 'revenue', label: 'Gelir' },
-                        { key: 'expense', label: 'Gider' },
-                        { key: 'profit', label: 'Kar', isProfit: true }
+                        { key: 'category', label: 'Category' },
+                        { key: 'revenue', label: 'Revenue' },
+                        { key: 'expense', label: 'Expense' },
+                        { key: 'profit', label: 'Profit', isProfit: true }
                       ]}
                       icon="📊"
                     />
                     <EnhancedTable 
-                      title="Araç Bazında Analiz" 
+                      title="Analysis by Vehicle" 
                       data={weeklyData.breakdown?.byVehicle || []} 
                       columns={[
-                        { key: 'vehicle', label: 'Araç' },
-                        { key: 'revenue', label: 'Gelir' },
-                        { key: 'expense', label: 'Gider' },
-                        { key: 'profit', label: 'Kar', isProfit: true }
+                        { key: 'vehicle', label: 'Vehicle' },
+                        { key: 'revenue', label: 'Revenue' },
+                        { key: 'expense', label: 'Expense' },
+                        { key: 'profit', label: 'Profit', isProfit: true }
                       ]}
                       icon="🚗"
                     />
                   </div>
                   
                   <EnhancedTable 
-                    title="Personel Bazında Analiz" 
+                    title="Analysis by Personnel" 
                     data={weeklyData.breakdown?.byPersonnel || []} 
                     columns={[
                       { key: 'personnel', label: 'Personel' },
-                      { key: 'revenue', label: 'Gelir' },
-                      { key: 'expense', label: 'Gider' },
-                      { key: 'profit', label: 'Kar', isProfit: true }
+                      { key: 'revenue', label: 'Revenue' },
+                      { key: 'expense', label: 'Expense' },
+                      { key: 'profit', label: 'Profit', isProfit: true }
                     ]}
                     icon="👥"
                   />
                   
                   <EnhancedTable 
-                    title="Günlük Dağılım" 
+                    title="Daily Distribution" 
                     data={weeklyData.dailyBreakdown} 
                     columns={[
-                      { key: 'dayName', label: 'Gün' },
-                      { key: 'date', label: 'Tarih' },
-                      { key: 'revenue', label: 'Gelir' },
-                      { key: 'expense', label: 'Gider' },
-                      { key: 'profit', label: 'Kar', isProfit: true }
+                      { key: 'dayName', label: 'Day' },
+                      { key: 'date', label: 'Date' },
+                      { key: 'revenue', label: 'Revenue' },
+                      { key: 'expense', label: 'Expense' },
+                      { key: 'profit', label: 'Profit', isProfit: true }
                     ]}
                     icon="📅"
                   />
@@ -2359,37 +2377,37 @@ const ProfitPage: React.FC = () => {
                   
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                     <EnhancedTable 
-                      title="Kategori Bazında Analiz" 
+                      title="Analysis by Category" 
                       data={dailyData.breakdown?.byCategory || []} 
                       columns={[
-                        { key: 'category', label: 'Kategori' },
-                        { key: 'revenue', label: 'Gelir' },
-                        { key: 'expense', label: 'Gider' },
-                        { key: 'profit', label: 'Kar', isProfit: true }
+                        { key: 'category', label: 'Category' },
+                        { key: 'revenue', label: 'Revenue' },
+                        { key: 'expense', label: 'Expense' },
+                        { key: 'profit', label: 'Profit', isProfit: true }
                       ]}
                       icon="📊"
                     />
                     <EnhancedTable 
-                      title="Araç Bazında Analiz" 
+                      title="Analysis by Vehicle" 
                       data={dailyData.breakdown?.byVehicle || []} 
                       columns={[
-                        { key: 'vehicle', label: 'Araç' },
-                        { key: 'revenue', label: 'Gelir' },
-                        { key: 'expense', label: 'Gider' },
-                        { key: 'profit', label: 'Kar', isProfit: true }
+                        { key: 'vehicle', label: 'Vehicle' },
+                        { key: 'revenue', label: 'Revenue' },
+                        { key: 'expense', label: 'Expense' },
+                        { key: 'profit', label: 'Profit', isProfit: true }
                       ]}
                       icon="🚗"
                     />
                   </div>
                   
                   <EnhancedTable 
-                    title="Personel Bazında Analiz" 
+                    title="Analysis by Personnel" 
                     data={dailyData.breakdown?.byPersonnel || []} 
                     columns={[
                       { key: 'personnel', label: 'Personel' },
-                      { key: 'revenue', label: 'Gelir' },
-                      { key: 'expense', label: 'Gider' },
-                      { key: 'profit', label: 'Kar', isProfit: true }
+                      { key: 'revenue', label: 'Revenue' },
+                      { key: 'expense', label: 'Expense' },
+                      { key: 'profit', label: 'Profit', isProfit: true }
                     ]}
                     icon="👥"
                   />

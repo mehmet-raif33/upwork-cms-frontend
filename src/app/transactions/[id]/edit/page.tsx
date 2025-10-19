@@ -85,7 +85,7 @@ const EditTransactionPage: React.FC = () => {
                 try {
                     const token = localStorage.getItem('token');
                     if (!token) {
-                        setError('Token bulunamadı');
+                        setError('Token not found');
                         return;
                     }
                     
@@ -106,10 +106,10 @@ const EditTransactionPage: React.FC = () => {
                     // Set form data
                     const transactionData = transactionResponse.transaction;
                     setFormData({
-                        vehicle_id: transactionData.vehicle_id,
-                        category_id: transactionData.category_id,
+                        vehicle_id: transactionData.vehicle_id || '',
+                        category_id: transactionData.category_id || '',
                         description: transactionData.description || '',
-                        amount: transactionData.amount,
+                        amount: transactionData.amount || '',
                         expense: transactionData.expense || '',
                         is_expense: transactionData.is_expense !== undefined ? transactionData.is_expense : true,
                         transaction_date: transactionData.transaction_date.split('T')[0],
@@ -119,7 +119,7 @@ const EditTransactionPage: React.FC = () => {
                     
                 } catch (error: unknown) {
                     console.error('Error loading data:', error);
-                    let errorMessage = 'Veriler yüklenirken hata oluştu';
+                    let errorMessage = 'Error loading data';
                     if (error && typeof error === 'object' && 'message' in error) {
                         errorMessage += `: ${(error as { message?: string }).message}`;
                     }
@@ -147,33 +147,33 @@ const EditTransactionPage: React.FC = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                throw new Error('Token bulunamadı');
+                throw new Error('Token not found');
             }
 
-            // Validasyon
+            // Validation
             if (!formData.vehicle_id) {
-                setError('Araç seçimi zorunludur');
+                setError('Vehicle selection is required');
                 return;
             }
             
             if (!formData.category_id) {
-                setError('İşlem türü seçimi zorunludur');
+                setError('Transaction type selection is required');
                 return;
             }
             
             if (!formData.amount || parseFloat(formData.amount) <= 0) {
-                setError('Geçerli bir tutar giriniz');
+                setError('Please enter a valid amount');
                 return;
             }
 
-            // Gider validasyonu
+            // Expense validation
             if (formData.is_expense && (!formData.expense || parseFloat(formData.expense) <= 0)) {
-                setError('Geçerli bir gider tutarı giriniz');
+                setError('Please enter a valid expense amount');
                 return;
             }
             
             if (!formData.transaction_date) {
-                setError('İşlem tarihi zorunludur');
+                setError('Transaction date is required');
                 return;
             }
 
@@ -196,7 +196,7 @@ const EditTransactionPage: React.FC = () => {
             
         } catch (error: unknown) {
             console.error('Error updating transaction:', error);
-            let errorMessage = 'İşlem güncellenirken hata oluştu';
+            let errorMessage = 'Error updating transaction';
             if (error && typeof error === 'object' && 'message' in error) {
                 errorMessage += `: ${(error as { message?: string }).message}`;
             }
@@ -227,10 +227,10 @@ const EditTransactionPage: React.FC = () => {
                 <div className="mb-8 flex justify-between items-start">
                     <div>
                         <h1 className={`text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                            İşlem Düzenle
+                            Edit Transaction
                         </h1>
                         <p className={`text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                            İşlem bilgilerini güncelleyin
+                            Update transaction information
                         </p>
                     </div>
                     
@@ -247,7 +247,7 @@ const EditTransactionPage: React.FC = () => {
                                 : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
                         }`}
                     >
-                        Geri Dön
+                        Back
                     </motion.button>
                 </div>
 
@@ -296,7 +296,7 @@ const EditTransactionPage: React.FC = () => {
                                 {/* Vehicle Selection */}
                                 <div>
                                     <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        Araç *
+                                        Vehicle *
                                     </label>
                                     <select
                                         name="vehicle_id"
@@ -309,7 +309,7 @@ const EditTransactionPage: React.FC = () => {
                                                 : 'border-gray-300 bg-white text-gray-900'
                                         }`}
                                     >
-                                        <option value="">Araç Seçin</option>
+                                        <option value="">Select Vehicle</option>
                                         {vehicles.map((vehicle) => (
                                             <option key={vehicle.id} value={vehicle.id}>
                                                 {vehicle.plate}
@@ -321,7 +321,7 @@ const EditTransactionPage: React.FC = () => {
                                 {/* Transaction Type Selection */}
                                 <div>
                                     <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        İşlem Tipi *
+                                        Transaction Type *
                                     </label>
                                     <div className="flex gap-3">
                                         <label className={`flex items-center cursor-pointer ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -333,7 +333,7 @@ const EditTransactionPage: React.FC = () => {
                                                 onChange={(e) => setFormData({...formData, is_expense: e.target.value === 'true'})}
                                                 className="mr-2"
                                             />
-                                            <span className="text-red-500 font-medium">💰 Gider</span>
+                                            <span className="text-red-500 font-medium">💰 Expense</span>
                                         </label>
                                         <label className={`flex items-center cursor-pointer ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                                             <input
@@ -344,7 +344,7 @@ const EditTransactionPage: React.FC = () => {
                                                 onChange={(e) => setFormData({...formData, is_expense: e.target.value === 'true'})}
                                                 className="mr-2"
                                             />
-                                            <span className="text-green-500 font-medium">💵 Gelir</span>
+                                            <span className="text-green-500 font-medium">💵 Revenue</span>
                                         </label>
                                     </div>
                                 </div>
@@ -352,7 +352,7 @@ const EditTransactionPage: React.FC = () => {
                                 {/* Category Selection */}
                                 <div>
                                     <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        İşlem Türü *
+                                        🏷️ Transaction Type *
                                     </label>
                                     <select
                                         name="category_id"
@@ -365,7 +365,7 @@ const EditTransactionPage: React.FC = () => {
                                                 : 'border-gray-300 bg-white text-gray-900'
                                         }`}
                                     >
-                                        <option value="">İşlem Türü Seçin</option>
+                                        <option value="">Select Transaction Type</option>
                                         {categories.map((category) => (
                                             <option key={category.id} value={category.id}>
                                                 {category.name}
@@ -377,7 +377,7 @@ const EditTransactionPage: React.FC = () => {
                                 {/* Amount */}
                                 <div>
                                     <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        {formData.is_expense ? 'Gider (₺)' : 'Gelir (₺)'} *
+                                        {formData.is_expense ? 'Expense ($)' : 'Revenue ($)'} *
                                     </label>
                                     <input
                                         type="number"
@@ -399,7 +399,7 @@ const EditTransactionPage: React.FC = () => {
                                 {/* Transaction Date */}
                                 <div>
                                     <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        İşlem Tarihi *
+                                        Transaction Date *
                                     </label>
                                     <input
                                         type="date"
@@ -419,7 +419,7 @@ const EditTransactionPage: React.FC = () => {
                                 {formData.is_expense && (
                                     <div>
                                         <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                            Gerçek Gider (₺) *
+                                            Actual Expense ($) *
                                         </label>
                                         <input
                                             type="number"
@@ -443,7 +443,7 @@ const EditTransactionPage: React.FC = () => {
                             {/* Payment Method */}
                             <div className="mt-6">
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Ödeme Yöntemi
+                                    Payment Method
                                 </label>
                                 <select
                                     name="payment_method"
@@ -469,7 +469,7 @@ const EditTransactionPage: React.FC = () => {
                             {/* Description */}
                             <div className="mt-6">
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Açıklama
+                                    Description
                                 </label>
                                 <textarea
                                     name="description"
@@ -481,7 +481,7 @@ const EditTransactionPage: React.FC = () => {
                                             ? 'border-slate-600 bg-slate-700 text-white' 
                                             : 'border-gray-300 bg-white text-gray-900'
                                     }`}
-                                    placeholder="İşlem açıklaması..."
+                                    placeholder="Transaction description..."
                                 />
                             </div>
 
@@ -515,7 +515,7 @@ const EditTransactionPage: React.FC = () => {
                                             : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
                                     }`}
                                 >
-                                    İptal
+                                    Cancel
                                 </button>
                                 <button
                                     type="submit"
@@ -531,10 +531,10 @@ const EditTransactionPage: React.FC = () => {
                                     {saving ? (
                                         <span className="flex items-center">
                                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                            Güncelleniyor...
+                                            Updating...
                                         </span>
                                     ) : (
-                                        'Güncelle'
+                                        'Update'
                                     )}
                                 </button>
                             </div>
@@ -547,10 +547,10 @@ const EditTransactionPage: React.FC = () => {
                     <div className="text-center py-12">
                         <div className="text-6xl mb-4">🔍</div>
                         <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>
-                            İşlem Bulunamadı
+                            Transaction Not Found
                         </h3>
                         <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
-                            Düzenlemek istediğiniz işlem mevcut değil veya silinmiş olabilir.
+                            The transaction you want to edit does not exist or may have been deleted.
                         </p>
                     </div>
                 )}

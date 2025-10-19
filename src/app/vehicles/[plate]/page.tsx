@@ -227,7 +227,7 @@ const VehiclePage: React.FC<VehiclePageProps> = ({ params }) => {
                                     </div>
                                     <div className={`text-center p-4 rounded-lg ${theme === 'dark' ? 'bg-yellow-900/50' : 'bg-yellow-50'}`}>
                                         <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Total Amount</p>
-                                        <p className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>₺{transactionStats.totalAmount.toLocaleString()}</p>
+                                        <p className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>${transactionStats.totalAmount.toLocaleString()}</p>
                                     </div>
                                 </div>
                             </div>
@@ -359,13 +359,13 @@ const VehiclePage: React.FC<VehiclePageProps> = ({ params }) => {
                                     <div className={`flex justify-between items-center py-2 border-b ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}>
                                         <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Total Amount:</span>
                                         <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                            ₺{transactionStats.totalAmount.toLocaleString()}
+                                            ${transactionStats.totalAmount.toLocaleString()}
                                         </span>
                                     </div>
                                     <div className={`flex justify-between items-center py-2 border-b ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}>
                                         <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Average Amount:</span>
                                         <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                            ₺{transactionStats.averageAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+                                            ${transactionStats.averageAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center py-2">
@@ -470,7 +470,7 @@ const VehiclePage: React.FC<VehiclePageProps> = ({ params }) => {
                                                                 ? theme === 'dark' ? 'text-green-400' : 'text-green-600'
                                                                 : theme === 'dark' ? 'text-red-400' : 'text-red-600'
                                                         }`}>
-                                                            ₺{(typeof transaction.amount === 'string' ? parseFloat(transaction.amount) : transaction.amount).toLocaleString('en-US')}
+                                                            ${(typeof transaction.amount === 'string' ? parseFloat(transaction.amount) : transaction.amount).toLocaleString('en-US')}
                                                         </td>
                                                         <td className={`px-6 py-4 whitespace-nowrap text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                                                             {transaction.personnel_name || 'N/A'}
@@ -522,7 +522,7 @@ const VehiclePage: React.FC<VehiclePageProps> = ({ params }) => {
                                                                 ? theme === 'dark' ? 'text-green-400' : 'text-green-600'
                                                                 : theme === 'dark' ? 'text-red-400' : 'text-red-600'
                                                         }`}>
-                                                            ₺{(typeof transaction.amount === 'string' ? parseFloat(transaction.amount) : transaction.amount).toLocaleString('en-US')}
+                                                            ${(typeof transaction.amount === 'string' ? parseFloat(transaction.amount) : transaction.amount).toLocaleString('en-US')}
                                                         </p>
                                                     </div>
                                                 </div>

@@ -54,7 +54,7 @@ const AuthInitializer = () => {
               id: userData.id,
               email: userData.email,
               name: userData.name,
-              role: userData.role === 'admin' ? 'admin' : 'user' as 'admin' | 'user',
+              role: userData.role === 'manager' ? 'manager' : 'personnel' as 'manager' | 'personnel',
             }));
             
             // SADECE auth veya landing sayfasındaysa dashboard'a yönlendir
@@ -147,12 +147,12 @@ const AuthInitializer = () => {
       log.debug('Received login broadcast from another tab');
       
       if (userData && typeof userData === 'object' && 'id' in userData && 'email' in userData && 'name' in userData && 'role' in userData) {
-        const typedUserData = userData as { id: string; email: string; name: string; role: "user" | "admin" };
+        const typedUserData = userData as { id: string; email: string; name: string; role: "manager" | "personnel" };
         
         // Redux state'i güncelle (role mapping ile)
         const mappedUserData = {
           ...typedUserData,
-          role: typedUserData.role === 'admin' ? 'admin' : 'user' as 'admin' | 'user'
+          role: typedUserData.role === 'manager' ? 'manager' : 'personnel' as 'manager' | 'personnel'
         };
         dispatch(restoreAuth(mappedUserData));
         

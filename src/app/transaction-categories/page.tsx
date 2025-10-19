@@ -38,17 +38,7 @@ const TransactionCategoriesPage: React.FC = () => {
 
 
     // ✅ Auth check removed - AuthInitializer will handle redirect
-
-    // Redirect non-admin users to home page - ONLY after auth is initialized
-    useEffect(() => {
-        // ✅ Wait if auth not yet initialized
-        if (!isInitialized) return;
-        
-        if (isLoggedIn && user?.role !== 'admin') {
-            console.log('🔄 [TransactionCategories] Non-admin user, redirecting to dashboard');
-            router.push('/');
-        }
-    }, [isLoggedIn, isInitialized, user, router]); // ✅ isInitialized dependency added
+    // Transaction categories are viewable by all users, but only managers can edit/delete
 
     // Load categories on component mount
     useEffect(() => {
@@ -89,14 +79,16 @@ const TransactionCategoriesPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // Validate before setting loading
+        if (!formData.name.trim()) {
+            showToast('Transaction type name is required', 'error');
+            return;
+        }
+
         setLoading(true);
 
         try {
-            if (!formData.name.trim()) {
-                showToast('Transaction type name is required', 'error');
-                return;
-            }
-
             const token = localStorage.getItem('token');
             if (!token) {
                 throw new Error('Token not found');
@@ -174,8 +166,8 @@ const TransactionCategoriesPage: React.FC = () => {
         }
     };
 
-    // Show loading for non-logged in users
-    if (!isLoggedIn) {
+    // Show loading while auth is initializing
+    if (!isInitialized) {
         return (
             <div className="flex-1 min-h-screen w-full flex items-center justify-center">
                 <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -183,8 +175,8 @@ const TransactionCategoriesPage: React.FC = () => {
         );
     }
 
-    // Show loading for non-admin users (during redirect)
-    if (isLoggedIn && user?.role !== 'admin') {
+    // Show loading for non-logged in users
+    if (!isLoggedIn) {
         return (
             <div className="flex-1 min-h-screen w-full flex items-center justify-center">
                 <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -219,7 +211,7 @@ const TransactionCategoriesPage: React.FC = () => {
             )}
 
             {/* Add Button */}
-            {user?.role === 'admin' && (
+            {user?.role === 'manager' && (
                 <motion.div 
                     className="mb-6"
                     initial={{ opacity: 0, y: 20 }}
@@ -325,7 +317,7 @@ const TransactionCategoriesPage: React.FC = () => {
                                     </h3>
                                 </div>
                             </div>
-                            {user?.role === 'admin' && (
+                            {user?.role === 'manager' && (
                                 <div className="flex space-x-2">
                                     <button
                                         onClick={() => handleEdit(category)}
@@ -397,7 +389,7 @@ const TransactionCategoriesPage: React.FC = () => {
                         No Transaction Types Yet
                     </h3>
                     <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
-                        {user?.role === 'admin' 
+                        {user?.role === 'manager' 
                             ? 'Click "Add Transaction Type" button to add your first transaction type.'
                             : 'No transaction types have been added yet. Contact your administrator.'
                         }

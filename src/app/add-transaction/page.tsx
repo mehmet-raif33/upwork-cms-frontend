@@ -512,7 +512,7 @@ const AddTransactionPage: React.FC = () => {
                         {/* Category Selection */}
                         <div>
                             <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                Transaction Category Selection *
+                                Transaction Category *
                             </label>
                             <select
                                 name="category_id"
@@ -539,7 +539,7 @@ const AddTransactionPage: React.FC = () => {
                             {/* Amount */}
                             <div>
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    {formData.is_expense ? 'Revenue (₺)' : 'Amount (₺)'} *
+                                    {formData.is_expense ? 'Revenue ($)' : 'Amount ($)'} *
                                 </label>
                                 <input
                                     type="number"
@@ -582,7 +582,7 @@ const AddTransactionPage: React.FC = () => {
                         {formData.is_expense && (
                             <div>
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Expense (₺) *
+                                    Expense ($) *
                                 </label>
                                 <input
                                     type="number"

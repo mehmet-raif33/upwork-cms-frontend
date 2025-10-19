@@ -1,4 +1,4 @@
-# Ulas Tech - Araç Filo Yönetim Sistemi
+# Autapex - Araç Filo Yönetim Sistemi
 
 Modern ve kullanıcı dostu araç filo yönetim sistemi. Next.js, TypeScript, Tailwind CSS ve Supabase kullanılarak geliştirilmiştir.
 
@@ -24,7 +24,7 @@ Modern ve kullanıcı dostu araç filo yönetim sistemi. Next.js, TypeScript, Ta
 ### 1. Projeyi klonlayın
 ```bash
 git clone <repository-url>
-cd ulas
+cd autapex
 ```
 
 ### 2. Bağımlılıkları yükleyin
@@ -161,14 +161,14 @@ NEXT_PUBLIC_SERVER_API1=https://your-backend-domain.railway.app
 #### Backend Deployment
 1. Railway.app'da yeni proje oluşturun
 2. GitHub repository'nizi bağlayın
-3. `ulas-backend` klasörünü root directory olarak ayarlayın
+3. `autapex-backend` klasörünü root directory olarak ayarlayın
 4. Environment variables'ları yukarıdaki gibi tanımlayın
 5. Deploy edin
 
 #### Frontend Deployment  
 1. Railway.app'da yeni proje oluşturun
 2. GitHub repository'nizi bağlayın
-3. `ulas` klasörünü root directory olarak ayarlayın
+3. `autapex` klasörünü root directory olarak ayarlayın
 4. Environment variables'ları yukarıdaki gibi tanımlayın
 5. Deploy edin
 

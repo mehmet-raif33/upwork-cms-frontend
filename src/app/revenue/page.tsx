@@ -293,13 +293,13 @@ const RevenuePage: React.FC = () => {
   
   // Monthly revenue state
   const [monthlyData, setMonthlyData] = useState<MonthlyRevenue | null>(null);
-  const [selectedYear, setSelectedYear] = useState(2024);
-  const [selectedMonth, setSelectedMonth] = useState(1);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedCategoriesForMonthly, setSelectedCategoriesForMonthly] = useState<number[]>([]);
   
   // Yearly revenue state
   const [yearlyData, setYearlyData] = useState<YearlyRevenue | null>(null);
-  const [selectedYearForYearly, setSelectedYearForYearly] = useState(2024);
+  const [selectedYearForYearly, setSelectedYearForYearly] = useState(new Date().getFullYear());
   const [selectedCategoriesForYearly, setSelectedCategoriesForYearly] = useState<number[]>([]);
 
   // Weekly revenue state
@@ -803,11 +803,11 @@ const RevenuePage: React.FC = () => {
       const endDateStr = weekEnd.toISOString().split('T')[0];
       const value = `${startDateStr}_${endDateStr}`;
       
-      const startFormatted = currentWeekStart.toLocaleDateString('tr-TR', { 
+      const startFormatted = currentWeekStart.toLocaleDateString('en-US', { 
         day: 'numeric', 
         month: 'short' 
       });
-      const endFormatted = weekEnd.toLocaleDateString('tr-TR', { 
+      const endFormatted = weekEnd.toLocaleDateString('en-US', { 
         day: 'numeric', 
         month: 'short' 
       });
@@ -1236,7 +1236,7 @@ const RevenuePage: React.FC = () => {
 
   // Tek merkezi data loading effect
   useEffect(() => {
-    if (!isLoggedIn || user?.role !== 'admin') return;
+    if (!isLoggedIn || user?.role !== 'manager') return;
 
     console.log('🔄 [MAIN-USEEFFECT] Data loading triggered:', {
       activeTab,
@@ -1295,7 +1295,7 @@ const RevenuePage: React.FC = () => {
 
   // Load categories on first load
   useEffect(() => {
-    if (isLoggedIn && user?.role === 'admin') {
+    if (isLoggedIn && user?.role === 'manager') {
       loadCategories();
     }
   }, [isLoggedIn, user, loadCategories]);
@@ -1329,14 +1329,14 @@ const RevenuePage: React.FC = () => {
   // ✅ Auth checks removed - AuthInitializer will handle redirect
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('tr-TR', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'TRY'
+      currency: 'USD'
     }).format(amount);
   };
 
   const formatNumber = (num: number) => {
-    return new Intl.NumberFormat('tr-TR').format(num);
+    return new Intl.NumberFormat('en-US').format(num);
   };
 
   // Component render debug
@@ -1391,7 +1391,7 @@ const RevenuePage: React.FC = () => {
             >
               <div className="flex items-center gap-2">
                 <span className="text-lg group-hover:scale-110 transition-transform duration-200">📊</span>
-                <span>Kar Analizi</span>
+                <span>Profit Analysis</span>
                 <span className="text-sm group-hover:translate-x-1 transition-transform duration-200">→</span>
               </div>
             </motion.button>
@@ -1412,7 +1412,7 @@ const RevenuePage: React.FC = () => {
         {/* Tabs */}
         <div className="mb-6">
           <div className={`flex space-x-1 p-1 rounded-lg ${
-            theme === 'dark' ? 'bg-demirhan-dark-200' : 'bg-gray-100'
+            theme === 'dark' ? 'bg-autapex-dark-200' : 'bg-gray-100'
           }`}>
             <button
               onClick={() => setActiveTab('monthly')}
@@ -1525,7 +1525,7 @@ const RevenuePage: React.FC = () => {
                             <select
                               value={selectedYear}
                               onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                              className={`px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-demirhan-500 w-full ${
+                              className={`px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-autapex-500 w-full ${
                                 theme === 'dark' 
                                   ? 'bg-slate-700 border-slate-600 text-gray-200' 
                                   : 'bg-white border-gray-300 text-gray-900'
@@ -1538,12 +1538,12 @@ const RevenuePage: React.FC = () => {
                           </div>
                           <div>
                             <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                              Ay
+                              Month
                             </label>
                             <select
                               value={selectedMonth}
                               onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                              className={`px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-demirhan-500 w-full ${
+                              className={`px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-autapex-500 w-full ${
                                 theme === 'dark' 
                                   ? 'bg-slate-700 border-slate-600 text-gray-200' 
                                   : 'bg-white border-gray-300 text-gray-900'
@@ -1551,7 +1551,7 @@ const RevenuePage: React.FC = () => {
                             >
                               {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
                                 <option key={month} value={month}>
-                                  {new Date(2024, month - 1).toLocaleDateString('tr-TR', { month: 'long' })}
+                                  {new Date(2024, month - 1).toLocaleDateString('en-US', { month: 'long' })}
                                 </option>
                               ))}
                             </select>
@@ -1651,7 +1651,7 @@ const RevenuePage: React.FC = () => {
                                   console.log('💰 [UI-DEBUG] Rendering totalRevenue:', monthlyData.summary.totalRevenue, 'formatted:', formatCurrency(monthlyData.summary.totalRevenue));
                                   return formatCurrency(monthlyData.summary.totalRevenue);
                                 })()}
-                                {/* DEBUG: ₺54.800,00 (HARD-CODED TEST) */}
+                                {/* DEBUG: $54.800,00 (HARD-CODED TEST) */}
                               </p>
                             </div>
                             <div className={`p-3 rounded-full flex-shrink-0 ${theme === 'dark' ? 'bg-green-900/50' : 'bg-green-100'}`}>
@@ -1701,7 +1701,7 @@ const RevenuePage: React.FC = () => {
                                   console.log('📈 [UI-DEBUG] Rendering averageTransaction:', monthlyData.summary.averageTransaction, 'formatted:', formatCurrency(monthlyData.summary.averageTransaction));
                                   return formatCurrency(monthlyData.summary.averageTransaction);
                                 })()}
-                                {/* DEBUG: ₺13.700,00 (HARD-CODED TEST) */}
+                                {/* DEBUG: $13.700,00 (HARD-CODED TEST) */}
                               </p>
                             </div>
                             <div className={`p-3 rounded-full flex-shrink-0 ${theme === 'dark' ? 'bg-purple-900/50' : 'bg-purple-100'}`}>
@@ -1793,7 +1793,7 @@ const RevenuePage: React.FC = () => {
               })()
             )}
 
-            {/* Monthly Revenue - Veri Yok Durumu */}
+            {/* Monthly Revenue - No Data State */}
             {activeTab === 'monthly' && !monthlyData && !loading && (
               <div className={`text-center py-12 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                 <div className="text-6xl mb-4">📊</div>
@@ -1818,12 +1818,12 @@ const RevenuePage: React.FC = () => {
                   <div className="flex flex-col lg:flex-row gap-4 items-start">
                     <div className="w-full lg:w-auto">
                       <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                        Yıl
+                        Year
                       </label>
                       <select
                         value={selectedYearForYearly}
                         onChange={(e) => setSelectedYearForYearly(parseInt(e.target.value))}
-                        className={`px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-demirhan-500 w-full ${
+                        className={`px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-autapex-500 w-full ${
                           theme === 'dark' 
                             ? 'bg-slate-700 border-slate-600 text-gray-200' 
                             : 'bg-white border-gray-300 text-gray-900'
@@ -1836,7 +1836,7 @@ const RevenuePage: React.FC = () => {
                     </div>
                     <div className="flex-1 min-w-0 w-full lg:w-auto">
                       <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                        Kategoriler
+                        Categories
                       </label>
                       <div className={`p-3 border rounded-lg max-h-32 overflow-y-auto ${
                         theme === 'dark' 
@@ -1876,14 +1876,14 @@ const RevenuePage: React.FC = () => {
                 {/* Summary Cards */}
                 {yearlyData ? (
                   <>
-                    {/* Kategori Filtresi Bilgisi */}
+                    {/* Category Filter Info */}
                     {selectedCategoriesForYearly.length > 0 && (
                       <div className={`mb-6 p-4 rounded-lg border ${
                         theme === 'dark' ? 'bg-red-900/20 border-red-700' : 'bg-red-50 border-red-200'
                       }`}>
                         <div className="flex items-center flex-wrap gap-2">
                           <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-red-700'}`}>
-                            📊 Filtrelenmiş Kategoriler:
+                            📊 Filtered Categories:
                           </span>
                           {selectedCategoriesForYearly.map(catId => {
                             const category = categories.find(cat => cat.id === catId);
@@ -1905,7 +1905,7 @@ const RevenuePage: React.FC = () => {
                                 : 'bg-red-500 hover:bg-red-600 text-white'
                             }`}
                           >
-                            Filtreyi Temizle
+                            Clear Filter
                           </button>
                         </div>
                       </div>
@@ -1942,7 +1942,7 @@ const RevenuePage: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex-1 min-w-0">
                           <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                            Toplam İşlem
+                            Total Transactions
                           </p>
                           <p className={`text-xl md:text-2xl font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                             {formatNumber(yearlyData.summary.totalTransactions)}
@@ -1984,7 +1984,7 @@ const RevenuePage: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex-1 min-w-0">
                           <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                            Ortalama İşlem
+                            Average Transaction
                           </p>
                           <p className={`text-xl md:text-2xl font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                             {formatCurrency(yearlyData.summary.averageTransactionValue)}
@@ -2104,14 +2104,14 @@ const RevenuePage: React.FC = () => {
               </motion.div>
             )}
 
-            {/* Yearly Revenue - Veri Yok Durumu */}
+            {/* Yearly Revenue - No Data State */}
             {activeTab === 'yearly' && !yearlyData && !loading && (
               <div className={`text-center py-12 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                 <div className="text-6xl mb-4">📊</div>
                 <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
                   No Data Found
                 </h3>
-                <p>Seçilen yıllık dönem için veri bulunmuyor.</p>
+                <p>No data available for the selected yearly period.</p>
               </div>
             )}
 
@@ -2182,7 +2182,7 @@ const RevenuePage: React.FC = () => {
                     </div>
                     <div className="flex-1 min-w-0 w-full lg:w-auto">
                           <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                        Kategoriler
+                        Categories
                           </label>
                       <div className={`p-3 border rounded-lg max-h-32 overflow-y-auto ${
                               theme === 'dark' 
@@ -2222,14 +2222,14 @@ const RevenuePage: React.FC = () => {
                 {/* Summary Cards */}
                 {weeklyData ? (
                   <>
-                    {/* Kategori Filtresi Bilgisi */}
+                    {/* Category Filter Info */}
                     {selectedCategoriesForWeekly.length > 0 && (
                       <div className={`mb-6 p-4 rounded-lg border ${
                         theme === 'dark' ? 'bg-red-900/20 border-red-700' : 'bg-red-50 border-red-200'
                       }`}>
                         <div className="flex items-center flex-wrap gap-2">
                           <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-red-700'}`}>
-                            📊 Filtrelenmiş Kategoriler:
+                            📊 Filtered Categories:
                           </span>
                           {selectedCategoriesForWeekly.map(catId => {
                             const category = categories.find(cat => cat.id === catId);
@@ -2251,7 +2251,7 @@ const RevenuePage: React.FC = () => {
                                 : 'bg-red-500 hover:bg-red-600 text-white'
                             }`}
                           >
-                            Filtreyi Temizle
+                            Clear Filter
                           </button>
                         </div>
                       </div>
@@ -2288,7 +2288,7 @@ const RevenuePage: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex-1 min-w-0">
                             <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                              İşlem Sayısı
+                              Transaction Count
                             </p>
                             <p className={`text-xl md:text-2xl font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                               {formatNumber(weeklyData.summary.transactionCount)}
@@ -2309,7 +2309,7 @@ const RevenuePage: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex-1 min-w-0">
                             <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                              Ortalama İşlem
+                              Average Transaction
                             </p>
                             <p className={`text-xl md:text-2xl font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                               {formatCurrency(weeklyData.summary.averageTransaction)}
@@ -2343,7 +2343,7 @@ const RevenuePage: React.FC = () => {
                                   {day.dayName}
                                 </p>
                                 <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                  {new Date(day.date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
+                                  {new Date(day.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
                                 </p>
                                 <p className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                                   {formatCurrency(day.revenue)}
@@ -2428,20 +2428,20 @@ const RevenuePage: React.FC = () => {
                     <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
                       No Data Found
                     </h3>
-                    <p>Seçilen hafta için veri bulunmuyor.</p>
+                    <p>No data available for the selected week.</p>
                   </div>
                 )}
               </motion.div>
             )}
 
-            {/* Weekly Revenue - Veri Yok Durumu */}
+            {/* Weekly Revenue - No Data State */}
             {activeTab === 'weekly' && !weeklyData && !loading && (
               <div className={`text-center py-12 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                 <div className="text-6xl mb-4">📊</div>
                 <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
                   No Data Found
                 </h3>
-                <p>Seçilen haftalık dönem için veri bulunmuyor.</p>
+                <p>No data available for the selected weekly period.</p>
               </div>
             )}
 
@@ -2459,7 +2459,7 @@ const RevenuePage: React.FC = () => {
                   <div className="flex flex-col lg:flex-row gap-4 items-start">
                     <div className="w-full lg:w-auto">
                       <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                        Tarih Seçimi
+                        Date Selection
                       </label>
                       <input
                         type="date"
@@ -2474,7 +2474,7 @@ const RevenuePage: React.FC = () => {
                     </div>
                     <div className="flex-1 min-w-0 w-full lg:w-auto">
                       <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                        Kategoriler
+                        Categories
                       </label>
                       <div className={`p-3 border rounded-lg max-h-32 overflow-y-auto ${
                         theme === 'dark' 
@@ -2514,14 +2514,14 @@ const RevenuePage: React.FC = () => {
                 {/* Summary Cards */}
                 {dailyData ? (
                   <>
-                    {/* Kategori Filtresi Bilgisi */}
+                    {/* Category Filter Info */}
                     {selectedCategoriesForDaily.length > 0 && (
                       <div className={`mb-6 p-4 rounded-lg border ${
                         theme === 'dark' ? 'bg-red-900/20 border-red-700' : 'bg-red-50 border-red-200'
                       }`}>
                         <div className="flex items-center flex-wrap gap-2">
                           <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-red-700'}`}>
-                            📊 Filtrelenmiş Kategoriler:
+                            📊 Filtered Categories:
                           </span>
                           {selectedCategoriesForDaily.map(catId => {
                             const category = categories.find(cat => cat.id === catId);
@@ -2543,7 +2543,7 @@ const RevenuePage: React.FC = () => {
                                 : 'bg-red-500 hover:bg-red-600 text-white'
                             }`}
                           >
-                            Filtreyi Temizle
+                            Clear Filter
                           </button>
                         </div>
                       </div>
@@ -2580,7 +2580,7 @@ const RevenuePage: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex-1 min-w-0">
                             <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                              İşlem Sayısı
+                              Transaction Count
                             </p>
                             <p className={`text-xl md:text-2xl font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                               {formatNumber(dailyData.summary.transactionCount)}
@@ -2601,7 +2601,7 @@ const RevenuePage: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex-1 min-w-0">
                             <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                              Ortalama İşlem
+                              Average Transaction
                             </p>
                             <p className={`text-xl md:text-2xl font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                               {formatCurrency(dailyData.summary.averageTransaction)}
@@ -2635,10 +2635,10 @@ const RevenuePage: React.FC = () => {
                               📅
                             </div>
                             <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                              {new Date(selectedDailyDate).toLocaleDateString('tr-TR', { weekday: 'long' })}
+                              {new Date(selectedDailyDate).toLocaleDateString('en-US', { weekday: 'long' })}
                             </p>
                             <p className={`text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                              {new Date(selectedDailyDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                              {new Date(selectedDailyDate).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </p>
                             <div className={`mt-6 p-4 rounded-lg ${
                               theme === 'dark' ? 'bg-green-900/30 border border-green-700' : 'bg-green-50 border border-green-200'
@@ -2735,20 +2735,20 @@ const RevenuePage: React.FC = () => {
                     <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
                       No Data Found
                     </h3>
-                    <p>Seçilen günler için veri bulunmuyor.</p>
+                    <p>No data available for the selected days.</p>
                   </div>
                 )}
               </motion.div>
             )}
 
-            {/* Daily Revenue - Veri Yok Durumu */}
+            {/* Daily Revenue - No Data State */}
             {activeTab === 'daily' && !dailyData && !loading && (
               <div className={`text-center py-12 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                 <div className="text-6xl mb-4">📊</div>
                 <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
                   No Data Found
                 </h3>
-                <p>Seçilen günlük dönem için veri bulunmuyor.</p>
+                <p>No data available for the selected daily period.</p>
               </div>
             )}
           </>

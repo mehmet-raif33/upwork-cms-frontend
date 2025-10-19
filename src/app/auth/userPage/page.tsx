@@ -22,7 +22,7 @@ const UserPageContent: React.FC = () => {
     const [loadingActivities, setLoadingActivities] = useState(false);
     const [userData, setUserData] = useState({
         id: '',
-        name: 'Ahmet Yılmaz',
+        name: 'John Doe',
         email: 'ahmet@ulas.com',
         role: 'Driver',
         department: 'Logistics',
@@ -63,7 +63,7 @@ const UserPageContent: React.FC = () => {
                 id: user.id.toString(),
                 name: user.name || 'User',
                 email: user.email || '',
-                role: user.role === 'admin' ? 'Administrator' : 'Personnel',
+                role: user.role === 'manager' ? 'Manager' : 'Personnel',
                 department: 'General',
                 phone: '',
                 status: 'active',
@@ -98,14 +98,14 @@ const UserPageContent: React.FC = () => {
     }, [activeTab, userData.id]);
 
     const getActivityIcon = (action: string) => {
-        if (action.includes('giriş') || action.includes('login')) return '🔐';
-        if (action.includes('işlem') || action.includes('transaction')) return '💰';
-        if (action.includes('araç') || action.includes('vehicle')) return '🚗';
+        if (action.includes('login')) return '🔐';
+        if (action.includes('transaction')) return '💰';
+        if (action.includes('vehicle')) return '🚗';
         if (action.includes('personel') || action.includes('personnel')) return '👤';
-        if (action.includes('kategori') || action.includes('category')) return '📁';
-        if (action.includes('güncell') || action.includes('update')) return '✏️';
-        if (action.includes('sil') || action.includes('delete')) return '🗑️';
-        if (action.includes('ekle') || action.includes('create')) return '➕';
+        if (action.includes('category')) return '📁';
+        if (action.includes('update')) return '✏️';
+        if (action.includes('delete')) return '🗑️';
+        if (action.includes('create')) return '➕';
         return '📊';
     };
 

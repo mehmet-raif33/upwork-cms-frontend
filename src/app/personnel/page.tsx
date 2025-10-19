@@ -95,7 +95,7 @@ const PersonnelPage: React.FC = () => {
     // ✅ Wait if auth not yet initialized
     if (!isInitialized) return;
     
-    if (isLoggedIn && user?.role !== 'admin') {
+    if (isLoggedIn && user?.role !== 'manager') {
       console.log('🔄 [Personnel] Non-admin user, redirecting to dashboard');
       router.push('/');
     }
@@ -144,7 +144,7 @@ const PersonnelPage: React.FC = () => {
   }
 
   // Show loading for non-admin users (during redirect)
-  if (isLoggedIn && user?.role !== 'admin') {
+  if (isLoggedIn && user?.role !== 'manager') {
     return (
       <div className="flex-1 min-h-screen w-full flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -268,8 +268,8 @@ const PersonnelPage: React.FC = () => {
     e.preventDefault(); // Prevent link click
     e.stopPropagation();
     
-    if (user?.role !== 'admin') {
-      showToast('Admin permission required for this action', 'error');
+    if (user?.role !== 'manager') {
+      showToast('Manager permission required for this action', 'error');
       return;
     }
 
@@ -402,7 +402,7 @@ const PersonnelPage: React.FC = () => {
             </p>
           )}
         </div>
-        {user?.role === 'admin' && (
+        {user?.role === 'manager' && (
           <button
             onClick={() => setShowAddForm(true)}
             className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
@@ -472,7 +472,7 @@ const PersonnelPage: React.FC = () => {
                         ? 'bg-slate-700 border-slate-600 text-gray-100' 
                         : 'bg-white border-gray-300 text-gray-800'
                     }`}
-                    placeholder="Ahmet Yılmaz"
+                    placeholder="John Doe"
                   />
                 </div>
                 
@@ -552,8 +552,8 @@ const PersonnelPage: React.FC = () => {
                         : 'bg-white border-gray-300 text-gray-800'
                     }`}
                   >
-                    <option value="employee">Employee</option>
-                    <option value="admin">Administrator</option>
+                    <option value="personnel">Personnel</option>
+                    <option value="manager">Manager</option>
                   </select>
                 </div>
                 
@@ -648,10 +648,10 @@ const PersonnelPage: React.FC = () => {
             whileHover={{ y: -2 }}
           >
             <div>
-              <Link href={`/personnel/${person.id}-${person.full_name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || 'personel'}`} title={person.full_name || 'Personel Detayı'}>
+              <Link href={`/personnel/${person.id}-${person.full_name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || 'personnel'}`} title={person.full_name || 'Personnel Detail'}>
                 <div className="flex items-center justify-between mb-4">
                   <h3 className={`text-lg font-semibold ${theme === "dark" ? "text-gray-100" : "text-gray-800"}`}>
-                    {person.full_name || 'İsimsiz'}
+                    {person.full_name || 'Unnamed'}
                   </h3>
                   <div className="flex items-center gap-2">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -682,14 +682,14 @@ const PersonnelPage: React.FC = () => {
                   {person.role && (
                     <div className="flex justify-between">
                       <span className={theme === "dark" ? "text-gray-400" : "text-gray-600"}>Role:</span>
-                      <span className={theme === "dark" ? "text-gray-200" : "text-gray-800"}>{person.role === 'admin' ? 'Administrator' : 'Personnel'}</span>
+                      <span className={theme === "dark" ? "text-gray-200" : "text-gray-800"}>{person.role === 'manager' ? 'Manager' : 'Personnel'}</span>
                     </div>
                   )}
                 </div>
               </Link>
               
               {/* Admin Toggle Button */}
-              {user?.role === 'admin' && person.id !== user?.id && (
+              {user?.role === 'manager' && person.id !== user?.id && (
                 <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <button
                     onClick={(e) => handleToggleStatus(person, e)}

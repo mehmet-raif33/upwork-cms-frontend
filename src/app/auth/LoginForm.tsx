@@ -58,7 +58,7 @@ const LoginForm: React.FC = () => {
         id: user.id.toString(),
         email: user.email,
         name: user.username || user.full_name || "",
-        role: user.role === "admin" ? "admin" : "user" as "admin" | "user",
+        role: user.role === "manager" ? "manager" : "personnel" as "manager" | "personnel",
       };
       
       console.log('✅ Login successful, setting up token manager...');

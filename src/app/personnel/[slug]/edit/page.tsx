@@ -111,7 +111,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
           });
 
           // Manager control
-          if (foundPersonnel.role === 'admin') {
+          if (foundPersonnel.role === 'manager') {
             setCanEdit(false);
             setError('Manager accounts cannot be edited');
             return;
@@ -139,7 +139,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                });
 
                // Manager control
-               if (response.data.role === 'admin') {
+               if (response.data.role === 'manager') {
                  setCanEdit(false);
                  setError('Manager accounts cannot be edited');
                  return;
@@ -161,7 +161,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                });
 
                // Manager control
-               if (response.role === 'admin') {
+               if (response.role === 'manager') {
                  setCanEdit(false);
                  setError('Manager accounts cannot be edited');
                  return;
@@ -260,7 +260,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
   }
 
   // Admin olmayan kullanıcılar için loading göster (yönlendirme sırasında)
-  if (isLoggedIn && user?.role !== 'admin') {
+  if (isLoggedIn && user?.role !== 'manager') {
     return (
       <div className="flex-1 min-h-screen w-full flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -488,7 +488,7 @@ const PersonnelEditPage: React.FC<PersonnelEditPageProps> = ({ params }) => {
                   }`}
                 >
                   <option value="personnel">Personnel</option>
-                  <option value="admin">Manager</option>
+                  <option value="manager">Manager</option>
                 </select>
               </div>
 

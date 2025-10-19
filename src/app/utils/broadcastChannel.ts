@@ -202,7 +202,7 @@ export const broadcastLogout = (reason?: string) => {
   tabComm.send(MESSAGE_TYPES.LOGOUT, { reason, timestamp: Date.now() });
 };
 
-export const broadcastLogin = (userData: { id: string; email: string; name: string; role: "user" | "admin" }) => {
+export const broadcastLogin = (userData: { id: string; email: string; name: string; role: "manager" | "personnel" }) => {
   console.log('📤 Broadcasting login for user:', userData.name);
   tabComm.send(MESSAGE_TYPES.LOGIN, { ...userData, timestamp: Date.now() });
 };

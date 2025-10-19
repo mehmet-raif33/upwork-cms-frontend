@@ -81,7 +81,7 @@ const TransactionDetailPage: React.FC = () => {
                 try {
                     const token = localStorage.getItem('token');
                     if (!token) {
-                        setError('Token bulunamadı');
+                        setError('Token not found');
                         return;
                     }
                     
@@ -124,7 +124,7 @@ const TransactionDetailPage: React.FC = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                throw new Error('Token bulunamadı');
+                throw new Error('Token not found');
             }
 
             console.log('API call yapılıyor:', { status: statusForm.status, notes: statusForm.notes });
@@ -153,7 +153,7 @@ const TransactionDetailPage: React.FC = () => {
             console.error('Error type:', typeof error);
             console.error('Error details:', error);
             
-            let errorMessage = 'Durum güncellenirken hata oluştu';
+            let errorMessage = 'Error updating status';
             if (error && typeof error === 'object' && 'message' in error) {
                 errorMessage += `: ${(error as { message?: string }).message}`;
             }
@@ -207,7 +207,7 @@ const TransactionDetailPage: React.FC = () => {
                                     : 'bg-purple-500 hover:bg-purple-600'
                             }`}
                         >
-                            Durum Güncelle
+                            Update Status
                         </motion.button>
                         <motion.button
                             onClick={() => router.push(`/transactions/${transactionId}/edit`)}
@@ -301,13 +301,13 @@ const TransactionDetailPage: React.FC = () => {
                                                                 ? theme === 'dark' ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'
                                                                 : theme === 'dark' ? 'bg-gray-900 text-gray-200' : 'bg-gray-100 text-gray-800'
                                                         }`}>
-                                                            {item.action === 'created' ? 'Oluşturuldu' : 
-                                                             item.action === 'updated' ? 'Güncellendi' : 
-                                                             item.action === 'status_changed' ? 'Durum Değişti' : 
+                                                            {item.action === 'created' ? 'Created' : 
+                                                             item.action === 'updated' ? 'Updated' : 
+                                                             item.action === 'status_changed' ? 'Status Changed' : 
                                                              item.action}
                                                         </span>
                                                         <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                            {new Date(item.created_at).toLocaleString('tr-TR')}
+                                                            {new Date(item.created_at).toLocaleString('en-US')}
                                                         </span>
                                                     </div>
                                                     
@@ -439,7 +439,7 @@ const TransactionDetailPage: React.FC = () => {
                                                 İşlem Tarihi:
                                             </span>
                                             <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                                {new Date(transaction.transaction_date).toLocaleDateString('tr-TR')}
+                                                {new Date(transaction.transaction_date).toLocaleDateString('en-US')}
                                             </p>
                                         </div>
                                         <div>
@@ -460,7 +460,7 @@ const TransactionDetailPage: React.FC = () => {
                                         </div>
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                                                Ödeme Yöntemi:
+                                                Payment Method:
                                             </span>
                                             <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                                                 {transaction.payment_method || 'Nakit'}
@@ -468,10 +468,10 @@ const TransactionDetailPage: React.FC = () => {
                                         </div>
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                                                {transaction.is_expense ? 'Gelir:' : 'Tutar:'}
+                                                {transaction.is_expense ? 'Revenue:' : 'Amount:'}
                                             </span>
                                             <p className={`text-lg font-bold ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
-                                                💵 ₺{parseFloat(transaction.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                💵 ${parseFloat(transaction.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </p>
                                         </div>
                                         {transaction.is_expense && transaction.expense && (
@@ -480,7 +480,7 @@ const TransactionDetailPage: React.FC = () => {
                                                     Gider:
                                                 </span>
                                                 <p className={`text-lg font-bold ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>
-                                                    💰 ₺{parseFloat(transaction.expense).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    💰 ${parseFloat(transaction.expense).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </p>
                                             </div>
                                         )}
@@ -495,13 +495,13 @@ const TransactionDetailPage: React.FC = () => {
                                                         : theme === 'dark' ? 'text-red-400' : 'text-red-600'
                                                 }`}>
                                                     {parseFloat(transaction.amount) - parseFloat(transaction.expense) >= 0 ? '📈' : '📉'}
-                                                    ₺{(parseFloat(transaction.amount) - parseFloat(transaction.expense)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    ${(parseFloat(transaction.amount) - parseFloat(transaction.expense)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </p>
                                             </div>
                                         )}
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                                                Durum:
+                                                Status:
                                             </span>
                                             <div className="flex items-center space-x-2 mt-1">
                                                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -529,12 +529,12 @@ const TransactionDetailPage: React.FC = () => {
                                 {/* Vehicle Information */}
                                 <div>
                                     <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                        Araç Bilgileri
+                                        Vehicle Information
                                     </h3>
                                     <div className="space-y-3">
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                                                Plaka:
+                                                Plate:
                                             </span>
                                             <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                                                 {transaction.vehicle_plate || 'N/A'}
@@ -543,7 +543,7 @@ const TransactionDetailPage: React.FC = () => {
 
                                         <div>
                                             <span className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                                                Personel:
+                                                Personnel:
                                             </span>
                                             <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                                                 {transaction.personnel_name || 'N/A'}
@@ -554,7 +554,7 @@ const TransactionDetailPage: React.FC = () => {
                                                 İşlem Tarihi:
                                             </span>
                                             <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                                {new Date(transaction.transaction_date).toLocaleDateString('tr-TR')}
+                                                {new Date(transaction.transaction_date).toLocaleDateString('en-US')}
                                             </p>
                                         </div>
                                     </div>
@@ -581,7 +581,7 @@ const TransactionDetailPage: React.FC = () => {
                             {transaction.notes && (
                                 <div className="mt-6">
                                     <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                        Notlar
+                                        Notes
                                     </h3>
                                     <div className={`p-4 rounded-lg ${
                                         theme === 'dark' 
@@ -624,13 +624,13 @@ const TransactionDetailPage: React.FC = () => {
                             }`}
                         >
                             <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                İşlem Durumu Güncelle
+                                Update Transaction Status
                             </h3>
                             
                             <div className="space-y-4">
                                 <div>
                                     <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        Yeni Durum *
+                                        New Status *
                                     </label>
                                     <select
                                         value={statusForm.status}
@@ -641,17 +641,17 @@ const TransactionDetailPage: React.FC = () => {
                                                 : 'border-gray-300 bg-white text-gray-900'
                                         }`}
                                     >
-                                        <option value="">Durum Seçin</option>
-                                        <option value="pending">Beklemede</option>
-                                        <option value="in_progress">Devam Ediyor</option>
-                                        <option value="completed">Tamamlandı</option>
-                                        <option value="cancelled">İptal Edildi</option>
+                                        <option value="">Select Status</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="in_progress">In Progress</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="cancelled">Cancelled</option>
                                     </select>
                                 </div>
                                 
                                 <div>
                                     <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        Notlar
+                                        Notes
                                     </label>
                                     <textarea
                                         value={statusForm.notes}
@@ -662,7 +662,7 @@ const TransactionDetailPage: React.FC = () => {
                                                 ? 'border-slate-600 bg-slate-700 text-white' 
                                                 : 'border-gray-300 bg-white text-gray-900'
                                         }`}
-                                        placeholder="Durum değişikliği hakkında not..."
+                                        placeholder="Note about status change..."
                                     />
                                 </div>
                             </div>

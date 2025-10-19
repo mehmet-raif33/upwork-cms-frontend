@@ -78,7 +78,7 @@ export async function loginApi({ username, password }: { username: string; passw
   if (!res.ok) {
     const error = await res.json();
     console.error('❌ Login failed:', error);
-    throw new Error(error.message || 'Giriş başarısız');
+    throw new Error(error.message || 'Login failed');
   }
   
   const data = await res.json();
@@ -97,7 +97,7 @@ export async function getProfileApi(token: string) {
   
   if (!validateTokenStructure(token)) {
     console.error('🚨 Invalid token structure');
-    throw new Error('Token geçersiz veya süresi dolmuş');
+    throw new Error('Token is invalid or expired');
   }
   
   const res = await fetch(`${API_BASE_URL}/auth/profile`, {
@@ -125,7 +125,7 @@ export async function getProfileApi(token: string) {
     if (res.status === 401) {
       broadcastTokenExpired();
     }
-    throw new Error(error.message || 'Profil alınamadı');
+    throw new Error(error.message || 'Failed to fetch profile');
   }
   
   const data = await res.json();
@@ -148,7 +148,7 @@ export async function changePasswordApi(token: string, { oldPassword, newPasswor
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Şifre değiştirme başarısız');
+    throw new Error(error.message || 'Password change failed');
   }
   return res.json();
 }
@@ -159,7 +159,7 @@ export async function getUserApi(token: string, userId: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kullanıcı bilgisi alınamadı');
+    throw new Error(error.message || 'Failed to fetch user info');
   }
   return res.json();
 }
@@ -174,7 +174,7 @@ export async function getUsersApi(token: string) {
     if (res.status === 401) {
       broadcastTokenExpired();
     }
-    throw new Error(error.message || 'Kullanıcılar alınamadı');
+    throw new Error(error.message || 'Failed to fetch users');
   }
   return res.json();
 }
@@ -184,7 +184,7 @@ export async function healthCheckApi() {
   const res = await fetch(`${API_BASE_URL}/health`);
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Health check başarısız');
+    throw new Error(error.message || 'Health check failed');
   }
   return res.json();
 }
@@ -205,7 +205,7 @@ export async function getTransactionCategoriesApi(token: string) {
     if (res.status === 401) {
       broadcastTokenExpired();
     }
-    throw new Error(error.message || 'Kategoriler alınamadı');
+    throw new Error(error.message || 'Failed to fetch categories');
   }
   
   const data = await res.json();
@@ -224,7 +224,7 @@ export async function createTransactionCategoryApi(token: string, data: { name: 
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kategori oluşturulamadı');
+    throw new Error(error.message || 'Failed to create category');
   }
   return res.json();
 }
@@ -240,7 +240,7 @@ export async function updateTransactionCategoryApi(token: string, id: string, da
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kategori güncellenemedi');
+    throw new Error(error.message || 'Failed to update category');
   }
   return res.json();
 }
@@ -271,7 +271,7 @@ export async function getVehiclesApi(token: string, params?: { page?: number; li
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Araçlar alınamadı');
+    throw new Error(error.message || 'Failed to fetch vehicles');
   }
   const data = await res.json();
   return data;
@@ -283,7 +283,7 @@ export async function getVehicleApi(token: string, plate: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Araç bilgisi alınamadı');
+    throw new Error(error.message || 'Failed to fetch vehicle info');
   }
   return res.json();
 }
@@ -304,7 +304,7 @@ export async function createVehicleApi(token: string, data: {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Araç oluşturulamadı');
+    throw new Error(error.message || 'Failed to create vehicle');
   }
   return res.json();
 }
@@ -324,7 +324,7 @@ export async function updateVehicleApi(token: string, plate: string, data: {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Araç güncellenemedi');
+    throw new Error(error.message || 'Failed to update vehicle');
   }
   return res.json();
 }
@@ -336,7 +336,7 @@ export async function deleteVehicleApi(token: string, plate: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Araç silinemedi');
+    throw new Error(error.message || 'Failed to delete vehicle');
   }
   return res.json();
 }
@@ -356,7 +356,7 @@ export async function getPersonnelApi(token: string, params?: { page?: number; l
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Personel alınamadı');
+    throw new Error(error.message || 'Failed to fetch personnel');
   }
   const data = await res.json();
   return data;
@@ -368,7 +368,7 @@ export async function getPersonnelByIdApi(token: string, id: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Personel bilgisi alınamadı');
+    throw new Error(error.message || 'Failed to fetch personnel info');
   }
   return res.json();
 }
@@ -394,7 +394,7 @@ export async function createPersonnelApi(token: string, data: {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Personel oluşturulamadı');
+    throw new Error(error.message || 'Failed to create personnel');
   }
   return res.json();
 }
@@ -420,7 +420,7 @@ export async function updatePersonnelApi(token: string, id: string, data: {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Personel güncellenemedi');
+    throw new Error(error.message || 'Failed to update personnel');
   }
   return res.json();
 }
@@ -437,7 +437,7 @@ export async function updatePersonnelStatusApi(token: string, id: string, is_act
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Personel durumu güncellenemedi');
+    throw new Error(error.message || 'Failed to update personnel status');
   }
   return res.json();
 }
@@ -477,7 +477,7 @@ export async function getTransactionsApi(token: string, params?: {
     if (res.status === 401) {
       broadcastTokenExpired();
     }
-    throw new Error(error.message || 'İşlemler alınamadı');
+    throw new Error(error.message || 'Failed to fetch transactions');
   }
   
   const data = await res.json();
@@ -491,7 +491,7 @@ export async function getTransactionApi(token: string, id: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'İşlem bilgisi alınamadı');
+    throw new Error(error.message || 'Failed to fetch transaction info');
   }
   return res.json();
 }
@@ -515,7 +515,7 @@ export async function createTransactionApi(token: string, data: {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'İşlem oluşturulamadı');
+    throw new Error(error.message || 'Failed to create transaction');
   }
   return res.json();
 }
@@ -542,7 +542,7 @@ export async function updateTransactionApi(token: string, id: string, data: {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'İşlem güncellenemedi');
+    throw new Error(error.message || 'Failed to update transaction');
   }
   return res.json();
 }
@@ -554,7 +554,7 @@ export async function deleteTransactionApi(token: string, id: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'İşlem silinemedi');
+    throw new Error(error.message || 'Failed to delete transaction');
   }
   return res.json();
 }
@@ -566,7 +566,7 @@ export async function getTransactionsByVehicleApi(token: string, plate: string) 
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Araç işlemleri alınamadı');
+    throw new Error(error.message || 'Failed to fetch vehicle transactions');
   }
   return res.json();
 }
@@ -578,7 +578,7 @@ export async function getTransactionsByCategoryApi(token: string, categoryId: st
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kategori işlemleri alınamadı');
+    throw new Error(error.message || 'Failed to fetch category transactions');
   }
   return res.json();
 }
@@ -590,7 +590,7 @@ export async function getTransactionHistoryApi(token: string, transactionId: str
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'İşlem geçmişi alınamadı');
+    throw new Error(error.message || 'Failed to fetch transaction history');
   }
   return res.json();
 }
@@ -607,7 +607,7 @@ export async function updateTransactionStatusApi(token: string, transactionId: s
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'İşlem durumu güncellenemedi');
+    throw new Error(error.message || 'Failed to update transaction status');
   }
   return res.json();
 } 
@@ -618,7 +618,7 @@ export async function getActivitiesApi(token: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Etkinlikler alınamadı');
+    throw new Error(error.message || 'Failed to fetch activities');
   }
   const data = await res.json();
   return data.data || data; // Backend'den gelen veriyi düzgün şekilde al
@@ -630,7 +630,7 @@ export async function getPersonnelActivitiesApi(token: string, personnelId: stri
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Personel etkinlikleri alınamadı');
+    throw new Error(error.message || 'Failed to fetch personnel activities');
   }
   const data = await res.json();
   return data.data || data; // Backend'den gelen veriyi düzgün şekilde al
@@ -642,7 +642,7 @@ export async function getTotalRevenueApi(token: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Toplam ciro alınamadı');
+    throw new Error(error.message || 'Failed to fetch total revenue');
   }
   const data = await res.json();
   return data.data;
@@ -654,7 +654,7 @@ export async function getVehiclesCountApi(token: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Araç sayısı alınamadı');
+    throw new Error(error.message || 'Failed to fetch vehicle count');
   }
   const data = await res.json();
   return data.stats?.total_vehicles || 0;
@@ -666,7 +666,7 @@ export async function getPersonnelCountApi(token: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Personel sayısı alınamadı');
+    throw new Error(error.message || 'Failed to fetch personnel count');
   }
   const data = await res.json();
   return data.stats?.active_personnel || 0;
@@ -682,7 +682,7 @@ export async function getTransactionsStatsApi(token: string, start_date?: string
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'İşlem istatistikleri alınamadı');
+    throw new Error(error.message || 'Failed to fetch transaction stats');
   }
   const data = await res.json();
   return data.stats;
@@ -715,7 +715,7 @@ export async function getTransactionsSummaryStatsApi(token: string, params?: {
   
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'İşlem istatistikleri alınamadı');
+    throw new Error(error.message || 'Failed to fetch transaction stats');
   }
   
   const data = await res.json();
@@ -734,7 +734,7 @@ export async function getMonthlyRevenueApi(token: string, year?: number, month?:
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Aylık ciro alınamadı');
+    throw new Error(error.message || 'Failed to fetch monthly revenue');
   }
   return res.json();
 }
@@ -748,7 +748,7 @@ export async function getYearlyRevenueApi(token: string, year?: number) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Yıllık ciro alınamadı');
+    throw new Error(error.message || 'Failed to fetch yearly revenue');
   }
   return res.json();
 }
@@ -764,7 +764,7 @@ export async function getCategoryRevenueApi(token: string, categoryId?: string, 
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kategori ciro alınamadı');
+    throw new Error(error.message || 'Failed to fetch category revenue');
   }
   return res.json();
 }
@@ -786,7 +786,7 @@ export async function getCategoryYearlyRevenueApi(token: string, params: { categ
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kategori yıllık ciro verisi alınamadı');
+    throw new Error(error.message || 'Failed to fetch category yearly revenue');
   }
   return res.json();
 }
@@ -809,7 +809,7 @@ export async function getCategoryMonthlyRevenueApi(token: string, params: { cate
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kategori aylık ciro verisi alınamadı');
+    throw new Error(error.message || 'Failed to fetch category monthly revenue');
   }
   return res.json();
 }
@@ -832,7 +832,7 @@ export async function getCategoryWeeklyRevenueApi(token: string, params: { categ
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kategori haftalık ciro verisi alınamadı');
+    throw new Error(error.message || 'Failed to fetch category weekly revenue');
   }
   return res.json();
 }
@@ -854,7 +854,7 @@ export async function getCategoryDailyRevenueApi(token: string, params: { catego
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kategori günlük ciro verisi alınamadı');
+    throw new Error(error.message || 'Failed to fetch category daily revenue');
   }
   return res.json();
 }
@@ -877,7 +877,7 @@ export async function getCategoryCustomRevenueApi(token: string, params: { categ
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Kategori manuel ciro verisi alınamadı');
+    throw new Error(error.message || 'Failed to fetch category custom revenue');
   }
   return res.json();
 }
@@ -889,7 +889,7 @@ export async function getCustomerStatsApi(token: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Müşteri istatistikleri alınamadı');
+    throw new Error(error.message || 'Failed to fetch customer stats');
   }
   const data = await res.json();
   return data;
@@ -902,7 +902,7 @@ export async function getTopCustomersApi(token: string, limit?: number) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'En çok işlem yapan müşteriler alınamadı');
+    throw new Error(error.message || 'Failed to fetch top customers');
   }
   const data = await res.json();
   return data.data;
@@ -914,7 +914,7 @@ export async function getCustomerRevenueShareApi(token: string) {
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Müşteri ciro payları alınamadı');
+    throw new Error(error.message || 'Failed to fetch customer revenue shares');
   }
   const data = await res.json();
   return data.data;

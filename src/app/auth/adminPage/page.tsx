@@ -27,7 +27,7 @@ const AdminPage: React.FC = () => {
     const adminData = {
         name: user?.name || 'Admin User',
         email: user?.email || 'admin@ulas.com',
-        role: user?.role === 'admin' ? 'System Administrator' : 'User',
+        role: user?.role === 'manager' ? 'System Manager' : 'Personnel',
     };
 
     const handleChangePassword = async (e: React.FormEvent) => {
@@ -177,7 +177,7 @@ const AdminPage: React.FC = () => {
                             {users.map((u) => (
                                 <div key={u.id} className={`border rounded-lg p-4 transition-colors ${theme === 'dark' ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}>
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${u.role === 'admin' ? 'bg-purple-600' : 'bg-blue-600'}`}>{u.username?.charAt(0)?.toUpperCase() || '?'}</div>
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${u.role === 'manager' ? 'bg-purple-600' : 'bg-blue-600'}`}>{u.username?.charAt(0)?.toUpperCase() || '?'}</div>
                                         <div>
                                             <p className={`font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>{u.username}</p>
                                             <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{u.email}</p>
@@ -186,7 +186,7 @@ const AdminPage: React.FC = () => {
                                 </div>
                             ))}
                             {!usersLoading && !usersError && users.length === 0 && (
-                                <div className="text-center text-sm text-gray-400">Henüz kullanıcı yok.</div>
+                                <div className="text-center text-sm text-gray-400">No users yet.</div>
                             )}
                         </div>
                     </div>
@@ -247,25 +247,25 @@ const AdminPage: React.FC = () => {
                                 <div key={activity.id || index} className={`border rounded-lg sm:rounded-xl p-3 sm:p-4 transition-colors ${theme === 'dark' ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}>
                                     <div className="flex items-center gap-3">
                                         <span className="text-xl sm:text-2xl">
-                                            {activity.action?.toLowerCase().includes('araç') && '🚗'}
-                                            {activity.action?.toLowerCase().includes('kullanıcı') && '👤'}
-                                            {activity.action?.toLowerCase().includes('kategori') && '🏷️'}
-                                            {activity.action?.toLowerCase().includes('işlem') && '💸'}
-                                            {activity.action?.toLowerCase().includes('personel') && '👥'}
-                                            {activity.action?.toLowerCase().includes('şifre') && '🔐'}
-                                            {activity.action?.toLowerCase().includes('güncellendi') && '✏️'}
-                                            {activity.action?.toLowerCase().includes('silindi') && '🗑️'}
-                                            {activity.action?.toLowerCase().includes('eklendi') && '➕'}
+                                            {activity.action?.toLowerCase().includes('vehicle') && '🚗'}
+                                            {activity.action?.toLowerCase().includes('user') && '👤'}
+                                            {activity.action?.toLowerCase().includes('category') && '🏷️'}
+                                            {activity.action?.toLowerCase().includes('transaction') && '💸'}
+                                            {activity.action?.toLowerCase().includes('personnel') && '👥'}
+                                            {activity.action?.toLowerCase().includes('password') && '🔐'}
+                                            {activity.action?.toLowerCase().includes('updated') && '✏️'}
+                                            {activity.action?.toLowerCase().includes('deleted') && '🗑️'}
+                                            {activity.action?.toLowerCase().includes('added') && '➕'}
                                         </span>
                                         <div className="flex-1">
                                             <p className={`font-semibold text-sm sm:text-base ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>{activity.action}</p>
-                                            <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{activity.user_name ? `${activity.user_name} - ` : ''}{activity.created_at ? new Date(activity.created_at).toLocaleString('tr-TR') : ''}</p>
+                                            <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{activity.user_name ? `${activity.user_name} - ` : ''}{activity.created_at ? new Date(activity.created_at).toLocaleString('en-US') : ''}</p>
                                         </div>
                                     </div>
                                 </div>
                             ))}
                             {!activitiesLoading && !activitiesError && activities.length === 0 && (
-                                <div className="text-center text-sm text-gray-400">Henüz etkinlik yok.</div>
+                                <div className="text-center text-sm text-gray-400">No activities yet.</div>
                             )}
                         </div>
                     </div>

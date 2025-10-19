@@ -109,14 +109,14 @@ const CustomersPage: React.FC = () => {
     // ✅ Wait if auth not yet initialized
     if (!isInitialized) return;
     
-    if (isLoggedIn && user?.role !== 'admin') {
+    if (isLoggedIn && user?.role !== 'manager') {
       console.log('🔄 [Customers] Non-admin user, redirecting to dashboard');
       router.push('/');
     }
   }, [isLoggedIn, isInitialized, user, router]); // ✅ isInitialized dependency added
 
   useEffect(() => {
-    if (isLoggedIn && user?.role === 'admin') {
+    if (isLoggedIn && user?.role === 'manager') {
       fetchCustomers(pagination.page, searchTerm);
     }
   }, [isLoggedIn, user, pagination.page, searchTerm, fetchCustomers]);
@@ -131,9 +131,9 @@ const CustomersPage: React.FC = () => {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('tr-TR', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'TRY'
+      currency: 'USD'
     }).format(amount);
   };
 
@@ -141,7 +141,7 @@ const CustomersPage: React.FC = () => {
     return new Date(dateString).toLocaleDateString('en-US');
   };
 
-  if (!isLoggedIn || user?.role !== 'admin') {
+  if (!isLoggedIn || user?.role !== 'manager') {
     return (
       <div className="flex-1 min-h-screen w-full flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>

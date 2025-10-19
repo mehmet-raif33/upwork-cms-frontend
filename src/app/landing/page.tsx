@@ -44,14 +44,14 @@ const LandingPage = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mb-8"
           >
-            <div className={`inline-flex items-center justify-center w-32 h-32 rounded-full shadow-lg mb-4 ${
+            <div className={`inline-flex items-center justify-center rounded-lg shadow-lg mb-4 p-4 ${
               theme === 'dark' ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-gray-200'
             }`}>
               <Image
-                src="/logo.png"
-                alt="Demirhan Logo"
-                width={120}
-                height={120}
+                src="/logo2025 (2).png"
+                alt="Autapex Logo"
+                width={220}
+                height={110}
                 className="object-contain"
               />
             </div>
@@ -64,7 +64,7 @@ const LandingPage = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className={`text-5xl md:text-6xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
           >
-            Demirhan
+            Autapex
           </motion.h1>
 
           <motion.p
@@ -82,7 +82,7 @@ const LandingPage = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
             className={`text-lg mb-12 max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
           >
-            With Demirhan, record your vehicle transactions, calculate revenue, and 
+            With Autapex, record your vehicle transactions, calculate revenue, and 
             easily manage all your business&apos;s financial data.
           </motion.p>
 

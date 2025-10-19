@@ -110,7 +110,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
   }
 
   // Admin olmayan kullanıcılar için loading göster (yönlendirme sırasında)
-  if (isLoggedIn && user?.role !== 'admin') {
+  if (isLoggedIn && user?.role !== 'manager') {
     return (
       <div className="flex-1 min-h-screen w-full flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -190,7 +190,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
               }`}>
                 {personnel.status === 'active' ? 'Active' : 'Inactive'}
               </span>
-              {personnel.role !== 'admin' && (
+              {personnel.role !== 'manager' && (
                 <Link 
                   href={`/personnel/${personnel.id}-${personnel.full_name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || 'personel'}/edit`}
                   className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
@@ -202,7 +202,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
                   Edit
                 </Link>
               )}
-              {personnel.role === 'admin' && (
+              {personnel.role === 'manager' && (
                 <span className={`px-4 py-2 rounded-lg font-medium ${
                   theme === 'dark'
                     ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
@@ -232,7 +232,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
                   {personnel.full_name || 'Unnamed'}
                 </h2>
                 <p className={`text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                  {personnel.role === 'admin' ? 'Manager' : 'Personnel'}
+                  {personnel.role === 'manager' ? 'Manager' : 'Personnel'}
                 </p>
               </div>
               <div className="lg:col-span-2">
@@ -291,7 +291,7 @@ const PersonnelDetailPage: React.FC<PersonnelPageProps> = ({ params }) => {
             <div className={`flex justify-between items-center py-2 border-b ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}>
               <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Role:</span>
               <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                {personnel.role === 'admin' ? 'Manager' : 'Personnel'}
+                {personnel.role === 'manager' ? 'Manager' : 'Personnel'}
               </span>
             </div>
             <div className={`flex justify-between items-center py-2 border-b ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}>

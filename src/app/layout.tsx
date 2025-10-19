@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Demirhan - İşletme Yönetim Sistemi",
-  description: "Demirhan ile araç işlemlerinizi kaydedin, ciro hesaplamalarınızı yapın ve işletmenizi yönetin",
+  title: "Autapex - Business Management System",
+  description: "Record your vehicle transactions, calculate revenue, and manage your business with Autapex",
 };
 
 export default function RootLayout({

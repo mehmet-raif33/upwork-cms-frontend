@@ -16,6 +16,7 @@ interface Transaction {
   vehicle_id: string;
   description: string;
   amount: string; // Backend'den decimal olarak geldiği için string
+  expense?: string; // İşlem maliyeti - kar hesabı için (sadece kar sayfasında gösterilecek)
   transaction_date: string;
   category_id: string;
   created_at: string;
@@ -129,7 +130,7 @@ const TransactionsPage: React.FC = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                setError('Token bulunamadı');
+                setError('Token not found');
                 return;
             }
             
@@ -172,7 +173,7 @@ const TransactionsPage: React.FC = () => {
             
         } catch (error: unknown) {
             console.error('Error loading data:', error);
-            let errorMessage = 'Veriler yüklenirken hata oluştu';
+            let errorMessage = 'Error loading data';
             if (error && typeof error === 'object' && 'message' in error) {
                 errorMessage += `: ${(error as { message?: string }).message}`;
             }
@@ -436,7 +437,7 @@ const TransactionsPage: React.FC = () => {
                                     Total Amount
                                 </p>
                                 <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                    ₺{totalAmount.toLocaleString('en-US')}
+                                    ${totalAmount.toLocaleString('en-US')}
                                 </p>
                             </div>
                             <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl bg-green-500 text-white">
@@ -461,7 +462,7 @@ const TransactionsPage: React.FC = () => {
                                     Average Amount
                                 </p>
                                 <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                    ₺{averageAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+                                    ${averageAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })}
                                 </p>
                             </div>
                             <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl bg-purple-500 text-white">
@@ -502,7 +503,7 @@ const TransactionsPage: React.FC = () => {
                                         ? 'border-slate-600 bg-slate-700 text-white' 
                                         : 'border-gray-300 bg-white text-gray-900'
                                 }`}
-                                placeholder="Plaka ara..."
+                                placeholder="Search plate..."
                             />
                         </div>
 
@@ -594,7 +595,7 @@ const TransactionsPage: React.FC = () => {
                             {/* Min Amount Filter */}
                             <div>
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Min Amount (₺)
+                                    Min Amount ($)
                                 </label>
                                 <input
                                     type="number"
@@ -615,7 +616,7 @@ const TransactionsPage: React.FC = () => {
                             {/* Max Amount Filter */}
                             <div>
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Max Amount (₺)
+                                    Max Amount ($)
                                 </label>
                                 <input
                                     type="number"
@@ -691,6 +692,9 @@ const TransactionsPage: React.FC = () => {
                                                     Amount
                                                 </th>
                                                 <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>
+                                                    Profit
+                                                </th>
+                                                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>
                                                     Personnel
                                                 </th>
                                                 <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>
@@ -708,7 +712,7 @@ const TransactionsPage: React.FC = () => {
                                                     className={`${theme === 'dark' ? 'hover:bg-slate-700' : 'hover:bg-gray-50'} transition-colors duration-200`}
                                                 >
                                                     <td className={`px-6 py-4 whitespace-nowrap text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
-                                                        {new Date(transaction.transaction_date).toLocaleDateString('tr-TR')}
+                                                        {new Date(transaction.transaction_date).toLocaleDateString('en-US')}
                                                     </td>
                                                     <td className={`px-6 py-4 whitespace-nowrap text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -734,7 +738,14 @@ const TransactionsPage: React.FC = () => {
                                                             ? theme === 'dark' ? 'text-green-400' : 'text-green-600'
                                                             : theme === 'dark' ? 'text-red-400' : 'text-red-600'
                                                     }`}>
-                                                        ₺{parseFloat(transaction.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        ${parseFloat(transaction.amount || '0').toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold ${
+                                                        (parseFloat(transaction.amount || '0') - parseFloat(transaction.expense || '0')) >= 0
+                                                            ? theme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+                                                            : theme === 'dark' ? 'text-red-400' : 'text-red-600'
+                                                    }`}>
+                                                        ${(parseFloat(transaction.amount || '0') - parseFloat(transaction.expense || '0')).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                     </td>
                                                     <td className={`px-6 py-4 whitespace-nowrap text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                                                         {transaction.personnel_name || 'N/A'}
@@ -803,7 +814,7 @@ const TransactionsPage: React.FC = () => {
                                                 {transaction.category_name || 'N/A'}
                                             </h3>
                                             <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                {new Date(transaction.transaction_date).toLocaleDateString('tr-TR')}
+                                                {new Date(transaction.transaction_date).toLocaleDateString('en-US')}
                                             </p>
                                         </div>
                                         <div className="text-right">
@@ -812,7 +823,7 @@ const TransactionsPage: React.FC = () => {
                                                     ? theme === 'dark' ? 'text-green-400' : 'text-green-600'
                                                     : theme === 'dark' ? 'text-red-400' : 'text-red-600'
                                             }`}>
-                                                ₺{parseFloat(transaction.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                ${parseFloat(transaction.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </div>
                                             <span className={`inline-flex px-1.5 py-0.5 text-xs font-semibold rounded-full mt-1 ${getStatusInfo(transaction.status).color}`}>
                                                 {getStatusInfo(transaction.status).text}
@@ -826,6 +837,16 @@ const TransactionsPage: React.FC = () => {
                                             <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Personnel:</span>
                                             <span className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                                                 {transaction.personnel_name || 'N/A'}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Profit:</span>
+                                            <span className={`text-xs font-bold ${
+                                                (parseFloat(transaction.amount || '0') - parseFloat(transaction.expense || '0')) >= 0
+                                                    ? theme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+                                                    : theme === 'dark' ? 'text-red-400' : 'text-red-600'
+                                            }`}>
+                                                ${(parseFloat(transaction.amount || '0') - parseFloat(transaction.expense || '0')).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </span>
                                         </div>
                                         {transaction.description && (

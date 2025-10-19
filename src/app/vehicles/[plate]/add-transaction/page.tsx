@@ -73,7 +73,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    setError('Token bulunamadı');
+                    setError('Token not found');
                     return;
                 }
                 
@@ -92,7 +92,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                 
             } catch (error: unknown) {
                 console.error('Error loading data:', error);
-                let errorMessage = 'Veriler yüklenirken hata oluştu';
+                let errorMessage = 'Error loading data';
                 if (error && typeof error === 'object' && 'message' in error) {
                     errorMessage += `: ${(error as { message?: string }).message}`;
                 }
@@ -129,37 +129,37 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                throw new Error('Token bulunamadı');
+                throw new Error('Token not found');
             }
 
             if (!vehicle) {
-                throw new Error('Araç bilgisi bulunamadı');
+                throw new Error('Vehicle information not found');
             }
 
-            // İşlem validasyonu
+            // Transaction validation
             if (!formData.category_id) {
-                setError('İşlem türü seçimi zorunludur');
+                setError('Transaction category selection is required');
                 return;
             }
             
             if (!formData.description.trim()) {
-                setError('Açıklama alanı zorunludur');
+                setError('Description field is required');
                 return;
             }
             
             if (!formData.amount || parseFloat(formData.amount) <= 0) {
-                setError('Geçerli bir tutar giriniz');
+                setError('Please enter a valid amount');
                 return;
             }
 
-            // Gider validasyonu
+            // Expense validation
             if (formData.is_expense && (!formData.expense || parseFloat(formData.expense) <= 0)) {
-                setError('Geçerli bir gider tutarı giriniz');
+                setError('Please enter a valid expense amount');
                 return;
             }
             
             if (!formData.transaction_date) {
-                setError('İşlem tarihi zorunludur');
+                setError('Transaction date is required');
                 return;
             }
 
@@ -175,13 +175,13 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
 
             await createTransactionApi(token, transactionData);
             
-            // Başarı mesajı göster ve araç detay sayfasına yönlendir
-            showToast('İşlem başarıyla eklendi!', 'success');
+            // Show success message and redirect to vehicle detail page
+            showToast('Transaction successfully added!', 'success');
             router.push(`/vehicles/${plate}`);
             
         } catch (error: unknown) {
             console.error('Transaction creation error:', error);
-            let errorMessage = 'İşlem eklenirken hata oluştu';
+            let errorMessage = 'Error adding transaction';
             if (error && typeof error === 'object' && 'message' in error) {
                 errorMessage = (error as { message?: string }).message || errorMessage;
             }
@@ -212,14 +212,14 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                 <div className="mb-4 sm:mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                     <div>
                         <h1 className={`text-2xl sm:text-3xl font-bold mb-1 sm:mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                            {vehicle ? `${vehicle.plate} - İşlem Ekle` : 'İşlem Ekle'}
+                            {vehicle ? `${vehicle.plate} - Add Transaction` : 'Add Transaction'}
                         </h1>
                         <p className={`text-base sm:text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                            {vehicle ? `${vehicle.plate} (${vehicle.year}) aracı için yeni işlem ekleyin` : 'Araç için yeni işlem ekleyin'}
+                            {vehicle ? `Add a new transaction for ${vehicle.plate} (${vehicle.year})` : 'Add a new transaction for the vehicle'}
                         </p>
                     </div>
                     
-                    {/* Geri Dön Butonu */}
+                    {/* Back Button */}
                     <motion.button
                         onClick={() => router.push(`/vehicles/${plate}`)}
                         initial={{ opacity: 0, scale: 0.9 }}
@@ -234,8 +234,8 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                     >
                         <span className="flex items-center">
                             <span className="text-base sm:text-lg mr-1 sm:mr-2">←</span>
-                            <span className="hidden sm:inline">Araç Detayına Dön</span>
-                            <span className="sm:hidden">Geri</span>
+                            <span className="hidden sm:inline">Back to Vehicle</span>
+                            <span className="sm:hidden">Back</span>
                         </span>
                     </motion.button>
                 </div>
@@ -274,8 +274,8 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                         <div className="flex items-center">
                             <div className="text-2xl mr-3">🚗</div>
                             <div>
-                                <h3 className="font-semibold text-lg">Seçili Araç: {vehicle.plate}</h3>
-                                <p className="text-sm opacity-90">Yıl: {vehicle.year} • {vehicle.customer_email && `Müşteri: ${vehicle.customer_email}`}</p>
+                                <h3 className="font-semibold text-lg">Selected Vehicle: {vehicle.plate}</h3>
+                                <p className="text-sm opacity-90">Year: {vehicle.year} • {vehicle.customer_email && `Customer: ${vehicle.customer_email}`}</p>
                             </div>
                         </div>
                     </motion.div>
@@ -294,7 +294,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                         {/* Transaction Type Selection */}
                         <div>
                             <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                İşlem Tipi *
+                                Transaction Type *
                             </label>
                             <div className="flex gap-3">
                                 <label className={`flex items-center cursor-pointer ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -306,7 +306,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                                         onChange={(e) => setFormData({...formData, is_expense: e.target.value === 'true'})}
                                         className="mr-2"
                                     />
-                                    <span className="text-red-500 font-medium">💰 Gider</span>
+                                    <span className="text-red-500 font-medium">💰 Expense</span>
                                 </label>
                                 <label className={`flex items-center cursor-pointer ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                                     <input
@@ -317,7 +317,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                                         onChange={(e) => setFormData({...formData, is_expense: e.target.value === 'true'})}
                                         className="mr-2"
                                     />
-                                    <span className="text-green-500 font-medium">💵 Gelir</span>
+                                    <span className="text-green-500 font-medium">💵 Revenue</span>
                                 </label>
                             </div>
                         </div>
@@ -325,7 +325,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                         {/* Category Selection */}
                         <div>
                             <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                İşlem Türü Seçimi *
+                                Transaction Category *
                             </label>
                             <select
                                 name="category_id"
@@ -338,7 +338,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                                 }`}
                                 required
                             >
-                                <option value="">İşlem türü seçiniz</option>
+                                <option value="">Select transaction category</option>
                                 {categories.map((category) => (
                                     <option key={category.id} value={category.id}>
                                         {category.name}
@@ -352,7 +352,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                             {/* Amount */}
                             <div>
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    {formData.is_expense ? 'Gelir (₺)' : 'Tutar (₺)'} *
+                                    {formData.is_expense ? 'Revenue ($)' : 'Amount ($)'} *
                                 </label>
                                 <input
                                     type="number"
@@ -374,7 +374,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                             {/* Transaction Date */}
                             <div>
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    İşlem Tarihi *
+                                    Transaction Date *
                                 </label>
                                 <input
                                     type="date"
@@ -395,7 +395,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                         {formData.is_expense && (
                             <div>
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Gider (₺) *
+                                    Expense ($) *
                                 </label>
                                 <input
                                     type="number"
@@ -418,7 +418,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                         {/* Description */}
                         <div>
                             <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                Açıklama *
+                                Description *
                             </label>
                             <textarea
                                 name="description"
@@ -430,7 +430,7 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                                         ? 'border-slate-600 bg-slate-700 text-white' 
                                         : 'border-gray-300 bg-white text-gray-900'
                                 }`}
-                                placeholder="İşlem detaylarını açıklayın..."
+                                placeholder="Describe transaction details..."
                                 required
                             />
                         </div>
@@ -454,13 +454,13 @@ const VehicleAddTransactionPage: React.FC<VehicleAddTransactionPageProps> = ({ p
                             {loading ? (
                                 <div className="flex items-center">
                                     <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-white mr-2"></div>
-                                    <span className="hidden sm:inline">Ekleniyor...</span>
-                                    <span className="sm:hidden">Ekleniyor...</span>
+                                    <span className="hidden sm:inline">Adding...</span>
+                                    <span className="sm:hidden">Adding...</span>
                                 </div>
                             ) : (
                                 <div>
-                                    <span className="hidden sm:inline">İşlem Ekle</span>
-                                    <span className="sm:hidden">Ekle</span>
+                                    <span className="hidden sm:inline">Add Transaction</span>
+                                    <span className="sm:hidden">Add</span>
                                 </div>
                             )}
                         </button>

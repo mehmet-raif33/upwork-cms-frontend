@@ -13,7 +13,7 @@ interface UserData {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'user';
+  role: 'manager' | 'personnel';
 }
 
 // Request queue interface
@@ -349,7 +349,7 @@ class TokenManager {
            id: data.user.id,
            email: data.user.email,
            name: data.user.full_name || data.user.username,
-           role: data.user.role === 'admin' ? 'admin' : 'user' as 'admin' | 'user'
+           role: data.user.role === 'manager' ? 'manager' : 'personnel' as 'manager' | 'personnel'
          };
         
         // Save to storage (with backward compatibility)

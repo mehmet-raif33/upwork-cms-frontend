@@ -29,7 +29,7 @@ export default function TestApisPage() {
   const [results, setResults] = useState<TestResults>({});
 
   if (!isLoggedIn) {
-    return <div className="p-4">Lütfen giriş yapın</div>;
+    return <div className="p-4">Please login</div>;
   }
 
   const testDailyProfit = async () => {
@@ -138,7 +138,7 @@ export default function TestApisPage() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">🧪 API Test Sayfası</h1>
+      <h1 className="text-3xl font-bold mb-6">🧪 API Test Page</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Profit API Tests */}
@@ -150,28 +150,28 @@ export default function TestApisPage() {
               disabled={loading}
               className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 disabled:opacity-50"
             >
-              Günlük Kar Test (2024-01-15)
+              Daily Profit Test (2024-01-15)
             </button>
             <button 
               onClick={testWeeklyProfit}
               disabled={loading}
               className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 disabled:opacity-50"
             >
-              Haftalık Kar Test (2024, Hafta 3)
+              Weekly Profit Test (2024, Week 3)
             </button>
             <button 
               onClick={testMonthlyProfit}
               disabled={loading}
               className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 disabled:opacity-50"
             >
-              Aylık Kar Test (2024-01)
+              Monthly Profit Test (2024-01)
             </button>
             <button 
               onClick={testYearlyProfit}
               disabled={loading}
               className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 disabled:opacity-50"
             >
-              Yıllık Kar Test (2024)
+              Yearly Profit Test (2024)
             </button>
           </div>
         </div>
@@ -185,28 +185,28 @@ export default function TestApisPage() {
               disabled={loading}
               className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
             >
-              Günlük Ciro Test (2024-01-15)
+              Daily Revenue Test (2024-01-15)
             </button>
             <button 
               onClick={testWeeklyRevenue}
               disabled={loading}
               className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
             >
-              Haftalık Ciro Test (2024, Hafta 3)
+              Weekly Revenue Test (2024, Week 3)
             </button>
             <button 
               onClick={testMonthlyRevenue}
               disabled={loading}
               className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
             >
-              Aylık Ciro Test (2024-01)
+              Monthly Revenue Test (2024-01)
             </button>
             <button 
               onClick={testYearlyRevenue}
               disabled={loading}
               className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
             >
-              Yıllık Ciro Test (2024)
+              Yearly Revenue Test (2024)
             </button>
           </div>
         </div>
@@ -214,10 +214,10 @@ export default function TestApisPage() {
 
       {/* Results Display */}
       <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">📋 Test Sonuçları</h2>
+        <h2 className="text-xl font-semibold mb-4">📋 Test Results</h2>
         {loading && (
           <div className="bg-yellow-100 p-4 rounded-lg">
-            <p className="text-yellow-800">⏳ API çağrısı yapılıyor...</p>
+            <p className="text-yellow-800">⏳ API call in progress...</p>
           </div>
         )}
         

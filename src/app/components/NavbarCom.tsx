@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import { toggleTheme } from "../redux/sliceses/themeSlice";
@@ -10,12 +10,12 @@ import { broadcastLogout } from "../utils/broadcastChannel";
 import Image from "next/image";
 
 const NavbarList = [
-    { name: "Dashboard", href: "/", icon: "📊", requiresAuth: true, adminOnly: false },
-    { name: "Transactions", href: "/transactions", icon: "📋", requiresAuth: true, adminOnly: false },
-    { name: "Revenue Calculation", href: "/revenue", icon: "💰", requiresAuth: true, adminOnly: true },
-    { name: "Transaction Types", href: "/transaction-categories", icon: "🏷️", requiresAuth: true, adminOnly: true },
-    { name: "Vehicles", href: "/vehicles", icon: "🚗", requiresAuth: true, adminOnly: false },
-    { name: "Personnel", href: "/personnel", icon: "👥", requiresAuth: true, adminOnly: true }
+    { name: "Dashboard", href: "/", icon: "📊", svgIcon: "/dashboard.svg", requiresAuth: true, adminOnly: false },
+    { name: "Transactions", href: "/transactions", icon: "📋", svgIcon: "/transactions.svg", requiresAuth: true, adminOnly: false },
+    { name: "Revenue Calculation", href: "/revenue", icon: "💰", svgIcon: "/revenue-calculator.svg", requiresAuth: true, adminOnly: true },
+    { name: "Transaction Types", href: "/transaction-categories", icon: "🏷️", svgIcon: "/transaction-types.svg", requiresAuth: true, adminOnly: true },
+    { name: "Vehicles", href: "/vehicles", icon: "🚗", svgIcon: "/vehicles.svg", requiresAuth: true, adminOnly: false },
+    { name: "Personnel", href: "/personnel", icon: "👥", svgIcon: "/personnels.svg", requiresAuth: true, adminOnly: true }
 ]
 
 interface NavbarComProps {
@@ -25,6 +25,7 @@ interface NavbarComProps {
 
 const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
     const router = useRouter();
+    const pathname = usePathname();
     const theme = useSelector((state: RootState) => state.theme.theme);
     const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
     const user = useSelector((state: RootState) => state.auth.user);
@@ -89,11 +90,11 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                             {isOpen && (
                                 <div className="flex items-center space-x-4">
                                     <Image
-                                        src="/logo.png"
-                                        alt="Demirhan Logo"
-                                        width={120}
-                                        height={120}
-                                        className="rounded-lg"
+                                        src="/logo2025 (2).png"
+                                        alt="Autapex Logo"
+                                        width={130}
+                                        height={65}
+                                        className="object-contain"
                                     />
                                 </div>
                             )}
@@ -101,7 +102,7 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                         <div className="flex flex-col space-y-2 w-full px-2">
                             {isLoggedIn && NavbarList.map((item, index) => {
                                 // Hide adminOnly pages for non-admin users
-                                if (item.adminOnly && user?.role !== 'admin') {
+                                if (item.adminOnly && user?.role !== 'manager') {
                                     return null;
                                 }
                                 
@@ -128,24 +129,24 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                             {/* Role-based buttons (only if logged in) */}
                             {isLoggedIn && isOpen && (
                                 <div className="flex flex-col space-y-2 mt-2">
-                                    {user?.role === 'admin' && (
+                                    {user?.role === 'manager' && (
                                         <Link
                                             href="/auth/adminPage"
                                             className={`text-sm font-semibold rounded-lg border flex items-center justify-center transition-all duration-300
                                                 ${theme === 'dark'
-                                                    ? 'text-white bg-gradient-to-r from-demirhan-700 to-demirhan-800 border-demirhan-700 hover:from-demirhan-800 hover:to-demirhan-900 hover:border-demirhan-800 hover:shadow-lg'
+                                                    ? 'text-white bg-gradient-to-r from-autapex-700 to-autapex-800 border-autapex-700 hover:from-autapex-800 hover:to-autapex-900 hover:border-autapex-800 hover:shadow-lg'
                                                     : 'text-white bg-gradient-to-r from-green-600 to-green-700 border-green-500 hover:from-green-700 hover:to-green-800 hover:border-green-600 hover:shadow-lg'}
                                                 transform hover:scale-105 active:scale-95 w-full p-2`}
                                         >
                                             <span className="text-lg mr-2">👤</span> Admin
                                         </Link>
                                     )}
-                                    {user?.role === 'user' && (
+                                    {user?.role === 'personnel' && (
                                         <Link
                                             href="/auth/userPage"
                                             className={`text-sm font-semibold rounded-lg border flex items-center justify-center transition-all duration-300
                                                 ${theme === 'dark'
-                                                    ? 'text-white bg-gradient-to-r from-demirhan-600 to-demirhan-700 border-demirhan-600 hover:from-demirhan-700 hover:to-demirhan-800 hover:border-demirhan-700 hover:shadow-lg'
+                                                    ? 'text-white bg-gradient-to-r from-autapex-600 to-autapex-700 border-autapex-600 hover:from-autapex-700 hover:to-autapex-800 hover:border-autapex-700 hover:shadow-lg'
                                                     : 'text-white bg-gradient-to-r from-red-500 to-red-600 border-red-400 hover:from-red-600 hover:to-red-700 hover:border-red-500 hover:shadow-lg'}
                                                 transform hover:scale-105 active:scale-95 w-full p-2`}
                                         >
@@ -185,7 +186,7 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                                         onClick={loggedIn}
                                         className={`text-sm font-semibold rounded-lg border flex items-center justify-center transition-all duration-300
                                         ${theme === 'dark'
-                                            ? 'text-white bg-gradient-to-r from-demirhan-600 to-demirhan-700 border-demirhan-600 hover:from-demirhan-700 hover:to-demirhan-800 hover:border-demirhan-700 hover:shadow-lg'
+                                            ? 'text-white bg-gradient-to-r from-autapex-600 to-autapex-700 border-autapex-600 hover:from-autapex-700 hover:to-autapex-800 hover:border-autapex-700 hover:shadow-lg'
                                             : 'text-white bg-gradient-to-r from-red-500 to-red-600 border-red-400 hover:from-red-600 hover:to-red-700 hover:border-red-500 hover:shadow-lg'}
                                         transform hover:scale-105 active:scale-95 w-full p-2`}
                                     >
@@ -196,7 +197,7 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                                         onClick={loggedIn}
                                         className={`text-sm font-semibold rounded-lg border flex items-center justify-center transition-all duration-300
                                         ${theme === 'dark'
-                                            ? 'text-white bg-gradient-to-r from-demirhan-600 to-demirhan-700 border-demirhan-600 hover:from-demirhan-700 hover:to-demirhan-800 hover:border-demirhan-700 hover:shadow-lg'
+                                            ? 'text-white bg-gradient-to-r from-autapex-600 to-autapex-700 border-autapex-600 hover:from-autapex-700 hover:to-autapex-800 hover:border-autapex-700 hover:shadow-lg'
                                             : 'text-white bg-gradient-to-r from-red-500 to-red-600 border-red-400 hover:from-red-600 hover:to-red-700 hover:border-red-500 hover:shadow-lg'}
                                         transform hover:scale-105 active:scale-95 h-12 w-12 p-0 mx-auto`}
                                     >
@@ -233,28 +234,41 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
 
             {/* Mobile Bottom Navigation */}
             {isLoggedIn && (
-                <nav className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 shadow-lg border-t h-20 ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-red-700 border-red-600'}`}>
-                    <div className="flex items-center justify-around px-2 py-1">
+                <nav className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 shadow-lg border-t ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-red-700 border-red-600'}`}>
+                    <div className="grid grid-cols-6 gap-2 px-3 py-3 h-20 items-center">
                         {NavbarList.map((item, index) => {
-                            // Hide adminOnly pages for non-admin users
-                            if (item.adminOnly && user?.role !== 'admin') {
+                            // Hide adminOnly pages for non-manager users
+                            if (item.adminOnly && user?.role !== 'manager') {
                                 return null;
                             }
+                            
+                            const isActive = pathname === item.href;
                             
                             return (
                                 <Link
                                     href={item.href}
-                                    className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg transition-all duration-200 text-xs ${
-                                        theme === 'dark' 
-                                            ? 'hover:bg-slate-700 active:bg-slate-800 text-gray-200'
-                                            : 'hover:bg-red-600 active:bg-red-800 text-white'
-                                    }`}
+                                    className={`flex items-center justify-center h-12 w-full rounded-lg transition-all duration-300 transform ${
+                                        isActive 
+                                            ? theme === 'dark'
+                                                ? 'bg-slate-700 scale-110 shadow-lg'
+                                                : 'bg-red-600 scale-110 shadow-lg'
+                                            : theme === 'dark' 
+                                                ? 'hover:bg-slate-700 active:scale-95'
+                                                : 'hover:bg-red-600 active:scale-95'
+                                    } hover:scale-105`}
                                     key={index}
                                 >
-                                    <span className="text-xl mb-0.5">{item.icon}</span>
-                                    <span className={`font-medium ${
-                                        theme === 'dark' ? 'text-gray-200' : 'text-white'
-                                    }`}>{item.name}</span>
+                                    <Image
+                                        src={item.svgIcon}
+                                        alt={item.name}
+                                        width={32}
+                                        height={32}
+                                        className={`object-contain transition-all duration-300 ${
+                                            theme === 'dark' 
+                                                ? 'brightness-0 invert' 
+                                                : 'brightness-0 invert'
+                                        } ${isActive ? 'scale-110' : ''}`}
+                                    />
                                 </Link>
                             );
                         })}
@@ -267,11 +281,11 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                         <Image
-                            src="/logo.png"
-                            alt="Demirhan Logo"
-                            width={80}
-                            height={80}
-                            className="rounded-lg"
+                            src="/logo2025 (2).png"
+                            alt="Autapex Logo"
+                            width={100}
+                            height={50}
+                            className="object-contain"
                         />
                     </div>
                     <div className="flex items-center space-x-2">
@@ -281,7 +295,7 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                         >
                             <span className="text-lg">{theme === 'dark' ? '☀️' : '🌙'}</span>
                         </button>
-                        {isLoggedIn && user?.role === 'admin' && (
+                        {isLoggedIn && user?.role === 'manager' && (
                             <Link
                                 href="/auth/adminPage"
                                 className={`flex items-center space-x-1 p-2 rounded-lg transition-all duration-200 ${theme === 'dark' ? 'hover:bg-slate-700' : 'hover:bg-red-600'}`}
@@ -290,7 +304,7 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                                 <span className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-white'}`}>Admin</span>
                             </Link>
                         )}
-                        {isLoggedIn && user?.role === 'user' && (
+                        {isLoggedIn && user?.role === 'personnel' && (
                             <Link
                                 href="/auth/userPage"
                                 className={`flex items-center space-x-1 p-2 rounded-lg transition-all duration-200 ${theme === 'dark' ? 'hover:bg-slate-700' : 'hover:bg-red-600'}`}

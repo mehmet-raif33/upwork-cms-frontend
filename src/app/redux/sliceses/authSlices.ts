@@ -4,7 +4,7 @@ interface User {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'user';
+  role: 'manager' | 'personnel';
 }
 
 interface AuthState {
@@ -27,7 +27,7 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ id: string; email: string; name: string; role: 'admin' | 'user' }>) => {
+    login: (state, action: PayloadAction<{ id: string; email: string; name: string; role: 'manager' | 'personnel' }>) => {
       state.isLoggedIn = true
       state.user = action.payload
       state.loading = false
@@ -59,7 +59,7 @@ export const authSlice = createSlice({
     setInitialized: (state, action: PayloadAction<boolean>) => {
       state.isInitialized = action.payload
     },
-    restoreAuth: (state, action: PayloadAction<{ id: string; email: string; name: string; role: 'admin' | 'user' }>) => {
+    restoreAuth: (state, action: PayloadAction<{ id: string; email: string; name: string; role: 'manager' | 'personnel' }>) => {
       state.isLoggedIn = true
       state.user = action.payload
       state.loading = false

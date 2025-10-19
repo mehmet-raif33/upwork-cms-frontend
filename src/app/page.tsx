@@ -176,7 +176,12 @@ export default function Home() {
           <div className="col-span-5 text-center text-red-500">{statsError}</div>
         ) : (
           <>
-            <div className={`rounded-lg shadow-sm border p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer ${theme === 'dark' ? 'bg-slate-800 border-slate-700 hover:bg-slate-700 hover:border-slate-600' : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}> 
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => router.push('/vehicles')}
+              className={`rounded-lg shadow-sm border p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer ${theme === 'dark' ? 'bg-slate-800 border-slate-700 hover:bg-slate-700 hover:border-slate-600' : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}
+            > 
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Total Vehicles</p>
@@ -184,8 +189,13 @@ export default function Home() {
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl bg-blue-500 text-white">🚗</div>
               </div>
-            </div>
-            <div className={`rounded-lg shadow-sm border p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer ${theme === 'dark' ? 'bg-slate-800 border-slate-700 hover:bg-slate-700 hover:border-slate-600' : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}> 
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => router.push('/personnel')}
+              className={`rounded-lg shadow-sm border p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer ${theme === 'dark' ? 'bg-slate-800 border-slate-700 hover:bg-slate-700 hover:border-slate-600' : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}
+            > 
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Active Personnel</p>
@@ -193,8 +203,13 @@ export default function Home() {
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl bg-green-500 text-white">👥</div>
               </div>
-            </div>
-            <div className={`rounded-lg shadow-sm border p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer ${theme === 'dark' ? 'bg-slate-800 border-slate-700 hover:bg-slate-700 hover:border-slate-600' : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}> 
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => router.push('/transactions')}
+              className={`rounded-lg shadow-sm border p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer ${theme === 'dark' ? 'bg-slate-800 border-slate-700 hover:bg-slate-700 hover:border-slate-600' : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}
+            > 
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Total Transactions</p>
@@ -202,16 +217,21 @@ export default function Home() {
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl bg-purple-500 text-white">📊</div>
               </div>
-            </div>
-            <div className={`rounded-lg shadow-sm border p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer ${theme === 'dark' ? 'bg-slate-800 border-slate-700 hover:bg-slate-700 hover:border-slate-600' : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}> 
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => router.push('/revenue')}
+              className={`rounded-lg shadow-sm border p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer ${theme === 'dark' ? 'bg-slate-800 border-slate-700 hover:bg-slate-700 hover:border-slate-600' : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}
+            > 
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Total Revenue</p>
-                  <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>{stats?.total_amount ? `₺${Number(stats.total_amount).toLocaleString('en-US')}` : '-'}</p>
+                  <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>{stats?.total_amount ? `$${Number(stats.total_amount).toLocaleString('en-US')}` : '-'}</p>
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl bg-yellow-500 text-white">💰</div>
               </div>
-            </div>
+            </motion.div>
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
