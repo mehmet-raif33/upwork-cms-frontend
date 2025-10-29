@@ -147,7 +147,7 @@ export default function Home() {
   }
 
   return (
-    <div className={`flex-1 bg-gradient-to-br min-h-screen p-6 ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
+    <div className={`flex-1 bg-gradient-to-br min-h-screen p-3 sm:p-6 ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
       {/* Header */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
@@ -155,10 +155,10 @@ export default function Home() {
         transition={{ duration: 0.3 }}
         className="mb-6"
       >
-        <h1 className={`text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>
+        <h1 className={`text-2xl sm:text-4xl font-bold mb-3 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>
           Welcome, {user?.name || 'User'}!
         </h1>
-        <p className={`text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+        <p className={`text-sm sm:text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
           {new Date().toLocaleDateString('en-US', { 
             weekday: 'long', 
             year: 'numeric', 
@@ -169,7 +169,7 @@ export default function Home() {
       </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6">
         {statsLoading ? (
                       <div className="col-span-5 text-center text-gray-400">Loading...</div>
         ) : statsError ? (
@@ -260,7 +260,7 @@ export default function Home() {
         <h2 className={`text-2xl font-bold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>
           🚀 Quick Actions
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-4">
           {/* New Transaction */}
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -272,8 +272,8 @@ export default function Home() {
                 : 'bg-blue-500 hover:bg-blue-600 text-white'
             }`}
           >
-            <div className="text-2xl mb-2">➕</div>
-            <div className="text-sm font-semibold">New Transaction</div>
+            <div className="text-lg sm:text-2xl mb-1 sm:mb-2">➕</div>
+            <div className="text-xs sm:text-sm font-semibold">New Transaction</div>
           </motion.button>
 
           {/* Add Vehicle */}
@@ -287,8 +287,8 @@ export default function Home() {
                 : 'bg-green-500 hover:bg-green-600 text-white'
             }`}
           >
-            <div className="text-2xl mb-2">🚗</div>
-            <div className="text-sm font-semibold">Add Vehicle</div>
+            <div className="text-lg sm:text-2xl mb-1 sm:mb-2">🚗</div>
+            <div className="text-xs sm:text-sm font-semibold">Add Vehicle</div>
           </motion.button>
 
           {/* Add Personnel */}
@@ -302,8 +302,8 @@ export default function Home() {
                 : 'bg-purple-500 hover:bg-purple-600 text-white'
             }`}
           >
-            <div className="text-2xl mb-2">👥</div>
-            <div className="text-sm font-semibold">Add Personnel</div>
+            <div className="text-lg sm:text-2xl mb-1 sm:mb-2">👥</div>
+            <div className="text-xs sm:text-sm font-semibold">Add Personnel</div>
           </motion.button>
 
           {/* Transactions */}
@@ -317,8 +317,8 @@ export default function Home() {
                 : 'bg-orange-500 hover:bg-orange-600 text-white'
             }`}
           >
-            <div className="text-2xl mb-2">📊</div>
-            <div className="text-sm font-semibold">Transactions</div>
+            <div className="text-lg sm:text-2xl mb-1 sm:mb-2">📊</div>
+            <div className="text-xs sm:text-sm font-semibold">Transactions</div>
           </motion.button>
 
           {/* Revenue Report */}
@@ -332,8 +332,8 @@ export default function Home() {
                 : 'bg-yellow-500 hover:bg-yellow-600 text-white'
             }`}
           >
-            <div className="text-2xl mb-2">💰</div>
-            <div className="text-sm font-semibold">Revenue Report</div>
+            <div className="text-lg sm:text-2xl mb-1 sm:mb-2">💰</div>
+            <div className="text-xs sm:text-sm font-semibold">Revenue Report</div>
           </motion.button>
 
           {/* Category Management */}
@@ -347,8 +347,8 @@ export default function Home() {
                 : 'bg-indigo-500 hover:bg-indigo-600 text-white'
             }`}
           >
-            <div className="text-2xl mb-2">🏷️</div>
-            <div className="text-sm font-semibold">Categories</div>
+            <div className="text-lg sm:text-2xl mb-1 sm:mb-2">🏷️</div>
+            <div className="text-xs sm:text-sm font-semibold">Categories</div>
           </motion.button>
 
           {/* Customer Management */}
@@ -362,8 +362,8 @@ export default function Home() {
                 : 'bg-cyan-500 hover:bg-cyan-600 text-white'
             }`}
           >
-            <div className="text-2xl mb-2">👥</div>
-            <div className="text-sm font-semibold">Customers</div>
+            <div className="text-lg sm:text-2xl mb-1 sm:mb-2">👥</div>
+            <div className="text-xs sm:text-sm font-semibold">Customers</div>
           </motion.button>
         </div>
       </motion.div>

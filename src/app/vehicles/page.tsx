@@ -202,7 +202,7 @@ const VehiclesPage: React.FC = () => {
     // No need for client-side filtering since we're using backend search
 
     return (
-        <div className={`flex-1 bg-gradient-to-br min-h-screen p-6 ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
+        <div className={`flex-1 bg-gradient-to-br min-h-screen p-3 sm:p-6 ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
             {/* Header */}
             <motion.div 
                 className="mb-8"
@@ -210,8 +210,8 @@ const VehiclesPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
             >
-                <h1 className={`text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Vehicle Management</h1>
-                <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>Manage and track your fleet vehicles</p>
+                <h1 className={`text-xl sm:text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>Vehicle Management</h1>
+                <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>Manage and track your fleet vehicles</p>
             </motion.div>
 
             {/* Error Message */}
@@ -279,8 +279,8 @@ const VehiclesPage: React.FC = () => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                 >
-                    <motion.div 
-                        className={`w-full max-w-md rounded-xl shadow-lg p-6 ${theme === 'dark' ? 'bg-slate-800' : 'bg-white'}`}
+            <motion.div 
+                className={`w-full max-w-sm sm:max-w-md rounded-xl shadow-lg p-4 sm:p-6 ${theme === 'dark' ? 'bg-slate-800' : 'bg-white'}`}
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.9, opacity: 0 }}
@@ -381,7 +381,7 @@ const VehiclesPage: React.FC = () => {
 
             {/* Vehicles Grid */}
             <motion.div 
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.2 }}

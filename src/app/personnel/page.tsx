@@ -314,7 +314,7 @@ const PersonnelPage: React.FC = () => {
 
   return (
     <div
-      className={`min-h-screen flex flex-col bg-gradient-to-br p-4 sm:p-8 ${
+      className={`min-h-screen flex flex-col bg-gradient-to-br p-3 sm:p-6 ${
         theme === "dark"
           ? "from-slate-900 to-blue-950"
           : "from-slate-50 to-blue-50"
@@ -442,8 +442,8 @@ const PersonnelPage: React.FC = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <motion.div 
-            className={`w-full max-w-2xl rounded-xl shadow-lg p-6 max-h-[90vh] overflow-y-auto ${theme === 'dark' ? 'bg-slate-800' : 'bg-white'}`}
+            <motion.div 
+                className={`w-full max-w-sm sm:max-w-2xl rounded-xl shadow-lg p-4 sm:p-6 max-h-[90vh] overflow-y-auto ${theme === 'dark' ? 'bg-slate-800' : 'bg-white'}`}
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -459,7 +459,7 @@ const PersonnelPage: React.FC = () => {
             </div>
             
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-1">Full Name *</label>
                   <input
@@ -631,7 +631,7 @@ const PersonnelPage: React.FC = () => {
 
       {/* Personnel List */}
       <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3 }}

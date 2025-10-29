@@ -32,6 +32,7 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
     const dispatch = useDispatch();
 
     const toggleSidebar = () => setIsOpen((prev) => !prev);
+    const visibleItems = NavbarList.filter(item => !(item.adminOnly && user?.role !== 'manager'));
 
     const loggedIn = () => {
         router.push('/auth');
@@ -235,23 +236,18 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
             {/* Mobile Bottom Navigation */}
             {isLoggedIn && (
                 <nav className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 shadow-lg border-t ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-red-700 border-red-600'}`}>
-                    <div className="grid grid-cols-6 gap-2 px-3 py-3 h-20 items-center">
-                        {NavbarList.map((item, index) => {
-                            // Hide adminOnly pages for non-manager users
-                            if (item.adminOnly && user?.role !== 'manager') {
-                                return null;
-                            }
-                            
+                    <div className="grid gap-1 px-2 py-2 h-16 items-center" style={{ gridTemplateColumns: `repeat(${visibleItems.length}, minmax(0, 1fr))` }}>
+                        {visibleItems.map((item, index) => {
                             const isActive = pathname === item.href;
                             
                             return (
                                 <Link
                                     href={item.href}
-                                    className={`flex items-center justify-center h-12 w-full rounded-lg transition-all duration-300 transform ${
+                                    className={`flex flex-col items-center justify-center h-12 w-full rounded-lg transition-all duration-300 transform ${
                                         isActive 
                                             ? theme === 'dark'
-                                                ? 'bg-slate-700 scale-110 shadow-lg'
-                                                : 'bg-red-600 scale-110 shadow-lg'
+                                                ? 'bg-slate-700 scale-105 shadow-lg'
+                                                : 'bg-red-600 scale-105 shadow-lg'
                                             : theme === 'dark' 
                                                 ? 'hover:bg-slate-700 active:scale-95'
                                                 : 'hover:bg-red-600 active:scale-95'
@@ -261,14 +257,17 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                                     <Image
                                         src={item.svgIcon}
                                         alt={item.name}
-                                        width={32}
-                                        height={32}
+                                        width={20}
+                                        height={20}
                                         className={`object-contain transition-all duration-300 ${
                                             theme === 'dark' 
                                                 ? 'brightness-0 invert' 
                                                 : 'brightness-0 invert'
                                         } ${isActive ? 'scale-110' : ''}`}
                                     />
+                                    <span className={`text-xs mt-1 font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-white'}`}>
+                                        {item.name}
+                                    </span>
                                 </Link>
                             );
                         })}
@@ -277,14 +276,14 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
             )}
 
             {/* Mobile Header */}
-            <div className={`lg:hidden fixed top-0 left-0 right-0 z-40 px-3 py-2 shadow-sm border-b h-16 ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-red-700 border-red-600'}`}>
+            <div className={`lg:hidden fixed top-0 left-0 right-0 z-40 px-2 py-2 shadow-sm border-b h-14 ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-red-700 border-red-600'}`}>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                         <Image
                             src="/logo2025 (2).png"
                             alt="Autapex Logo"
-                            width={100}
-                            height={50}
+                            width={80}
+                            height={40}
                             className="object-contain"
                         />
                     </div>

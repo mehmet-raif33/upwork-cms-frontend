@@ -152,7 +152,7 @@ const CustomersPage: React.FC = () => {
   return (
     <>
       <div className={`min-h-screen bg-gradient-to-br ${theme === 'dark' ? 'from-slate-900 via-slate-800 to-blue-950' : 'from-gray-50 via-white to-blue-50'}`}>
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -163,10 +163,10 @@ const CustomersPage: React.FC = () => {
             <div className="mb-8">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h1 className={`text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                  <h1 className={`text-xl sm:text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                     👥 Customer Management
                   </h1>
-                  <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
+                  <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                     All customer information and transaction history
                   </p>
                 </div>
@@ -203,10 +203,10 @@ const CustomersPage: React.FC = () => {
                   : 'bg-white/70 border-gray-200'
               }`}
             >
-              <div className="flex flex-col lg:flex-row gap-6 items-start">
+              <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 items-start">
                 {/* Search */}
                 <div className="flex-1 min-w-0">
-                  <form onSubmit={handleSearch} className="flex gap-4">
+                  <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                     <div className="flex-1">
                       <input
                         type="text"
