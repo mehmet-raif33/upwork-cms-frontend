@@ -1479,8 +1479,8 @@ const ProfitPage: React.FC = () => {
           : 'bg-white/70 border-gray-200'
       }`}
     >
-      <div className="flex flex-col lg:flex-row gap-6 items-start">
-        <div className="flex flex-col gap-4 w-full lg:w-auto min-w-[200px]">
+      <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 items-start">
+        <div className="flex flex-col gap-3 sm:gap-4 w-full xl:w-auto xl:min-w-[200px]">
           {tabType === 'monthly' && (
             <>
               <div>
@@ -1490,7 +1490,7 @@ const ProfitPage: React.FC = () => {
                 <select
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-3 focus:ring-emerald-500/50 transition-all ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-xl focus:outline-none focus:ring-2 sm:focus:ring-3 focus:ring-emerald-500/50 transition-all ${
                     theme === 'dark' 
                       ? 'bg-slate-700 border-slate-600 text-gray-200' 
                       : 'bg-white border-gray-300 text-gray-900'
@@ -1508,7 +1508,7 @@ const ProfitPage: React.FC = () => {
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-3 focus:ring-emerald-500/50 transition-all ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-xl focus:outline-none focus:ring-2 sm:focus:ring-3 focus:ring-emerald-500/50 transition-all ${
                     theme === 'dark' 
                       ? 'bg-slate-700 border-slate-600 text-gray-200' 
                       : 'bg-white border-gray-300 text-gray-900'
@@ -1532,7 +1532,7 @@ const ProfitPage: React.FC = () => {
               <select 
                 value={selectedYearForYearly} 
                 onChange={e => setSelectedYearForYearly(Number(e.target.value))} 
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-3 focus:ring-emerald-500/50 transition-all ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-xl focus:outline-none focus:ring-2 sm:focus:ring-3 focus:ring-emerald-500/50 transition-all ${
                   theme === 'dark' ? 'bg-slate-700 border-slate-600 text-gray-200' : 'bg-white border-gray-300 text-gray-900'
                 }`}
               >
@@ -1556,7 +1556,7 @@ const ProfitPage: React.FC = () => {
                     setSelectedYearForWeekly(newYear);
                     generateWeeklyOptions(newYear);
                   }} 
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-3 focus:ring-emerald-500/50 transition-all ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-xl focus:outline-none focus:ring-2 sm:focus:ring-3 focus:ring-emerald-500/50 transition-all ${
                     theme === 'dark' ? 'bg-slate-700 border-slate-600 text-gray-200' : 'bg-white border-gray-300 text-gray-900'
                   }`}
                 >
@@ -1577,7 +1577,7 @@ const ProfitPage: React.FC = () => {
                     setSelectedEndDate(endDate);
                     setSelectedWeek(e.target.value);
                   }} 
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-3 focus:ring-emerald-500/50 transition-all ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-xl focus:outline-none focus:ring-2 sm:focus:ring-3 focus:ring-emerald-500/50 transition-all ${
                     theme === 'dark' ? 'bg-slate-700 border-slate-600 text-gray-200' : 'bg-white border-gray-300 text-gray-900'
                   }`}
                 >
@@ -1606,21 +1606,21 @@ const ProfitPage: React.FC = () => {
           )}
         </div>
         
-        <div className="flex-1 min-w-0 w-full">
+        <div className="w-full xl:w-auto xl:min-w-[300px]">
           <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
             🏷️ Category Filtering (Under Development)
           </label>
-          <div className={`p-4 border rounded-xl max-h-40 overflow-y-auto ${
+          <div className={`p-3 sm:p-4 border rounded-xl max-h-32 sm:max-h-40 overflow-y-auto ${
             theme === 'dark' 
               ? 'bg-slate-700/50 border-slate-600' 
               : 'bg-gray-50 border-gray-300'
           }`}>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
               {categories.map(cat => (
                 <motion.label 
                   key={cat.id} 
                   whileHover={{ scale: 1.02 }}
-                  className={`flex items-center p-2 rounded-lg cursor-pointer transition-colors ${
+                  className={`flex items-center p-1.5 sm:p-2 rounded-lg cursor-pointer transition-colors text-xs sm:text-sm ${
                     theme === 'dark' ? 'hover:bg-slate-600' : 'hover:bg-gray-100'
                   }`}
                 >
@@ -2088,7 +2088,7 @@ const ProfitPage: React.FC = () => {
             transition={{ duration: 0.4 }}
             className="flex justify-center"
           >
-            <div className={`inline-flex p-2 rounded-3xl shadow-2xl backdrop-blur-lg ${
+            <div className={`inline-flex flex-wrap justify-center gap-1 sm:gap-2 p-1 sm:p-2 rounded-2xl sm:rounded-3xl shadow-2xl backdrop-blur-lg ${
               theme === 'dark' 
                 ? 'bg-slate-800/80 border border-slate-700/50' 
                 : 'bg-white/80 border border-gray-200/50'
@@ -2104,7 +2104,7 @@ const ProfitPage: React.FC = () => {
                   onClick={() => setActiveTab(tab.id as 'monthly' | 'yearly' | 'weekly' | 'daily')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`flex flex-col items-center gap-2 px-6 py-4 rounded-2xl font-bold transition-all duration-300 ${
+                  className={`flex flex-col items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 rounded-xl sm:rounded-2xl font-bold transition-all duration-300 text-xs sm:text-sm lg:text-base ${
                     activeTab === tab.id
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white shadow-2xl transform scale-105'
                       : theme === 'dark'
@@ -2112,8 +2112,8 @@ const ProfitPage: React.FC = () => {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
                   }`}
                 >
-                  <span className="text-2xl">{tab.icon}</span>
-                  <span className="text-sm font-semibold">{tab.desc}</span>
+                  <span className="text-lg sm:text-xl lg:text-2xl">{tab.icon}</span>
+                  <span className="text-xs sm:text-sm font-semibold">{tab.desc}</span>
                 </motion.button>
               ))}
             </div>

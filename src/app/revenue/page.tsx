@@ -1411,12 +1411,12 @@ const RevenuePage: React.FC = () => {
 
         {/* Tabs */}
         <div className="mb-6">
-          <div className={`flex space-x-1 p-1 rounded-lg ${
+          <div className={`flex flex-wrap gap-1 p-1 rounded-lg ${
             theme === 'dark' ? 'bg-autapex-dark-200' : 'bg-gray-100'
           }`}>
             <button
               onClick={() => setActiveTab('monthly')}
-              className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
+              className={`flex-1 min-w-0 px-2 sm:px-4 py-2 rounded-md font-medium transition-colors text-xs sm:text-sm ${
                 activeTab === 'monthly'
                   ? theme === 'dark' 
                       ? 'bg-slate-700 text-white shadow-sm' 
@@ -1430,7 +1430,7 @@ const RevenuePage: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('yearly')}
-              className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
+              className={`flex-1 min-w-0 px-2 sm:px-4 py-2 rounded-md font-medium transition-colors text-xs sm:text-sm ${
                 activeTab === 'yearly'
                   ? theme === 'dark' 
                       ? 'bg-slate-700 text-white shadow-sm' 
@@ -1444,7 +1444,7 @@ const RevenuePage: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('weekly')}
-              className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
+              className={`flex-1 min-w-0 px-2 sm:px-4 py-2 rounded-md font-medium transition-colors text-xs sm:text-sm ${
                   activeTab === 'weekly'
                   ? theme === 'dark' 
                       ? 'bg-slate-700 text-white shadow-sm' 
@@ -1458,7 +1458,7 @@ const RevenuePage: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('daily')}
-                              className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
+                              className={`flex-1 min-w-0 px-2 sm:px-4 py-2 rounded-md font-medium transition-colors text-xs sm:text-sm ${
                   activeTab === 'daily'
                     ? theme === 'dark' 
                       ? 'bg-slate-700 text-white shadow-sm' 
@@ -1516,8 +1516,8 @@ const RevenuePage: React.FC = () => {
                     <div className={`p-4 rounded-lg mb-6 border ${
                       theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
                     } shadow-sm`}>
-                      <div className="flex flex-col lg:flex-row gap-4 items-start">
-                        <div className="flex flex-col gap-4 w-full lg:w-auto">
+                      <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 items-start">
+                        <div className="flex flex-col gap-3 sm:gap-4 w-full lg:w-auto">
                           <div>
                             <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
                               Year
@@ -1815,7 +1815,7 @@ const RevenuePage: React.FC = () => {
                 <div className={`p-4 rounded-lg mb-6 border ${
                   theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
                 } shadow-sm`}>
-                  <div className="flex flex-col lg:flex-row gap-4 items-start">
+                  <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 items-start">
                     <div className="w-full lg:w-auto">
                       <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
                         Year
@@ -2126,8 +2126,8 @@ const RevenuePage: React.FC = () => {
                 <div className={`p-4 rounded-lg mb-6 border ${
                   theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
                 } shadow-sm`}>
-                    <div className="flex flex-col lg:flex-row gap-4 items-start">
-                    <div className="flex flex-col gap-4 w-full lg:w-auto">
+                    <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 items-start">
+                    <div className="flex flex-col gap-3 sm:gap-4 w-full lg:w-auto">
                         <div className="flex-1 min-w-0">
                             <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
                             Year Selection
@@ -2456,7 +2456,7 @@ const RevenuePage: React.FC = () => {
                 <div className={`p-4 rounded-lg mb-6 border ${
                   theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
                 } shadow-sm`}>
-                  <div className="flex flex-col lg:flex-row gap-4 items-start">
+                  <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 items-start">
                     <div className="w-full lg:w-auto">
                       <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
                         Date Selection

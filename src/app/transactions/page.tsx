@@ -335,7 +335,7 @@ const TransactionsPage: React.FC = () => {
     }
 
     return (
-        <div className={`flex-1 bg-gradient-to-br min-h-screen p-3 sm:p-6 ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
+        <div className={`flex-1 bg-gradient-to-br min-h-screen p-4 sm:p-5 lg:p-6 ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -508,7 +508,7 @@ const TransactionsPage: React.FC = () => {
                         </div>
 
                         {/* Two Column Grid for Other Filters */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
                             {/* Category Filter */}
                             <div>
                                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>

@@ -236,14 +236,14 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
             {/* Mobile Bottom Navigation */}
             {isLoggedIn && (
                 <nav className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 shadow-lg border-t ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-red-700 border-red-600'}`}>
-                    <div className="grid gap-1 px-2 py-2 h-16 items-center" style={{ gridTemplateColumns: `repeat(${visibleItems.length}, minmax(0, 1fr))` }}>
+                    <div className="grid gap-1 px-2 py-2 h-18 items-center" style={{ gridTemplateColumns: `repeat(${visibleItems.length}, minmax(0, 1fr))` }}>
                         {visibleItems.map((item, index) => {
                             const isActive = pathname === item.href;
                             
                             return (
                                 <Link
                                     href={item.href}
-                                    className={`flex flex-col items-center justify-center h-12 w-full rounded-lg transition-all duration-300 transform ${
+                                    className={`flex items-center justify-center h-14 w-full rounded-lg transition-all duration-300 transform ${
                                         isActive 
                                             ? theme === 'dark'
                                                 ? 'bg-slate-700 scale-105 shadow-lg'
@@ -253,21 +253,19 @@ const NavbarCom: React.FC<NavbarComProps> = ({ isOpen, setIsOpen }) => {
                                                 : 'hover:bg-red-600 active:scale-95'
                                     } hover:scale-105`}
                                     key={index}
+                                    title={item.name}
                                 >
                                     <Image
                                         src={item.svgIcon}
                                         alt={item.name}
-                                        width={20}
-                                        height={20}
+                                        width={28}
+                                        height={28}
                                         className={`object-contain transition-all duration-300 ${
                                             theme === 'dark' 
                                                 ? 'brightness-0 invert' 
                                                 : 'brightness-0 invert'
                                         } ${isActive ? 'scale-110' : ''}`}
                                     />
-                                    <span className={`text-xs mt-1 font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-white'}`}>
-                                        {item.name}
-                                    </span>
                                 </Link>
                             );
                         })}

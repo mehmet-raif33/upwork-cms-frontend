@@ -147,7 +147,7 @@ export default function Home() {
   }
 
   return (
-    <div className={`flex-1 bg-gradient-to-br min-h-screen p-3 sm:p-6 ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
+    <div className={`flex-1 bg-gradient-to-br min-h-screen p-4 sm:p-5 lg:p-6 ${theme === 'dark' ? 'from-slate-900 to-blue-950' : 'from-slate-50 to-blue-50'}`}>
       {/* Header */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
@@ -169,7 +169,7 @@ export default function Home() {
       </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6">
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-6">
         {statsLoading ? (
                       <div className="col-span-5 text-center text-gray-400">Loading...</div>
         ) : statsError ? (
@@ -260,7 +260,7 @@ export default function Home() {
         <h2 className={`text-2xl font-bold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>
           🚀 Quick Actions
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-1 sm:gap-2 lg:gap-4">
           {/* New Transaction */}
           <motion.button
             whileHover={{ scale: 1.05 }}

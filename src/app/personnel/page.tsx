@@ -314,7 +314,7 @@ const PersonnelPage: React.FC = () => {
 
   return (
     <div
-      className={`min-h-screen flex flex-col bg-gradient-to-br p-3 sm:p-6 ${
+      className={`min-h-screen flex flex-col bg-gradient-to-br p-4 sm:p-5 lg:p-6 ${
         theme === "dark"
           ? "from-slate-900 to-blue-950"
           : "from-slate-50 to-blue-50"
@@ -341,7 +341,7 @@ const PersonnelPage: React.FC = () => {
 
       {/* Stat Cards */}
       <motion.div 
-        className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-8 mb-6 sm:mb-10"
+        className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-6 sm:grid-cols-4 mb-4 sm:mb-6 lg:mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
@@ -631,7 +631,7 @@ const PersonnelPage: React.FC = () => {
 
       {/* Personnel List */}
       <motion.div 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3 }}

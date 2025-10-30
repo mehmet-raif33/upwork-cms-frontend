@@ -152,7 +152,7 @@ const CustomersPage: React.FC = () => {
   return (
     <>
       <div className={`min-h-screen bg-gradient-to-br ${theme === 'dark' ? 'from-slate-900 via-slate-800 to-blue-950' : 'from-gray-50 via-white to-blue-50'}`}>
-        <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-7xl">
+        <div className="container mx-auto px-4 sm:px-5 lg:px-6 py-5 sm:py-6 lg:py-8 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -353,7 +353,7 @@ const CustomersPage: React.FC = () => {
                     <div className="overflow-x-auto">
                       <div className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                          {/* Card layout for mobile view */}
-                         <div className="lg:hidden space-y-6 p-4">
+                         <div className="lg:hidden space-y-3 sm:space-y-4 p-4 sm:p-5">
                            {customers.map((customer, index) => {
                              const firstPlate = customer.vehicle_plates.split(', ')[0];
                              return (

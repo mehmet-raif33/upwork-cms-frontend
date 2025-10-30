@@ -92,13 +92,13 @@ const AppLayoutClient: React.FC<{ children: React.ReactNode }> = ({ children }) 
         {/* Main Content */}
         <main className={`transition-all duration-300 ${
           isLoggedIn && !isAuthOrLandingPage 
-            ? `pt-16 lg:pt-0 ${isOpen ? 'lg:ml-64' : 'lg:ml-18'}` // Add top padding for mobile navbar and dynamic left margin for desktop sidebar
+            ? `pt-14 lg:pt-0 ${isOpen ? 'lg:ml-64' : 'lg:ml-18'}` // Add top padding for mobile navbar and dynamic left margin for desktop sidebar
             : ''
         } ${
           // Conditional bottom padding - remove on auth and landing pages for mobile
           isAuthOrLandingPage 
             ? 'pb-0' 
-            : 'pb-20 lg:pb-0' // Bottom padding for mobile to account for bottom navigation (h-20 = 80px)
+            : 'pb-18 lg:pb-0' // Bottom padding for mobile to account for bottom navigation (h-18 = 72px)
         }`}>
           {children}
         </main>
